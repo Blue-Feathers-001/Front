@@ -1,0 +1,29 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="32" cy="32" r="32" fill="url(#gradient)"/>
+
+  <!-- Dumbbell Icon -->
+  <g transform="translate(12, 26)">
+    <!-- Left weight -->
+    <rect x="0" y="0" width="8" height="12" rx="2" fill="white"/>
+    <!-- Left bar -->
+    <rect x="8" y="4.5" width="6" height="3" fill="white"/>
+    <!-- Center bar -->
+    <rect x="14" y="3.5" width="12" height="5" rx="1" fill="white"/>
+    <!-- Right bar -->
+    <rect x="26" y="4.5" width="6" height="3" fill="white"/>
+    <!-- Right weight -->
+    <rect x="32" y="0" width="8" height="12" rx="2" fill="white"/>
+  </g>
+
+  <!-- Feather accent -->
+  <path d="M 45 15 Q 48 18 47 22 Q 46 20 44 19 Q 45 17 45 15 Z" fill="white" opacity="0.8"/>
+
+  <!-- Gradient Definition -->
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>

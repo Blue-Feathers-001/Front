@@ -8,8 +8,12 @@ import Navbar from '@/components/Navbar';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'GymFit Pro - Membership Management',
+  title: 'Blue Feathers Gym - Membership Management',
   description: 'Professional gym membership management system',
+  icons: {
+    icon: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({

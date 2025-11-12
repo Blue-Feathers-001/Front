@@ -14,6 +14,7 @@ interface User {
   role: 'admin' | 'user';
   membershipStatus: string;
   membershipPlan?: string;
+  membershipStartDate?: string;
   membershipEndDate?: string;
   avatar?: string;
   authProvider?: string;

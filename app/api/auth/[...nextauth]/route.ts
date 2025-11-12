@@ -1,0 +1,87 @@
+import NextAuth from "next-auth"
+import GoogleProvider from "next-auth/providers/google"
+import type { NextAuthOptions } from "next-auth"
+
+export const authOptions: NextAuthOptions = {
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    })
+  ],
+  callbacks: {
+    async jwt({ token, account, profile, user }) {
+      if (account && profile) {
+        // Call backend to register/login OAuth user
+        try {
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+
+          const names = user.name?.split(' ') || ['', '']
+          const firstName = names[0] || ''
+          const lastName = names.slice(1).join(' ') || ''
+
+          const response = await fetch(`${apiUrl}/auth/oauth/register`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: user.email,
+              name: user.name,
+              provider: 'google',
+              providerId: account.providerAccountId,
+              avatar: user.image,
+            }),
+          })
+
+          if (response.ok) {
+            const backendUser = await response.json()
+            // Store backend user data in token
+            token.backendUser = backendUser
+            token.backendToken = backendUser.token
+          } else {
+            console.error('Failed to register OAuth user with backend')
+          }
+        } catch (error) {
+          console.error('Error calling backend OAuth endpoint:', error)
+        }
+
+        token.accessToken = account.access_token
+      }
+      return token
+    },
+    async session({ session, token }) {
+      // Send properties to the client, including backend user data
+      session.accessToken = token.accessToken as string
+      if (token.backendUser) {
+        session.backendUser = token.backendUser as any
+      }
+      if (token.backendToken) {
+        session.backendToken = token.backendToken as string
+      }
+      return session
+    },
+    async signIn({ user, account, profile }) {
+      // Allow all Google users
+      return true
+    },
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url
+      return baseUrl
+    }
+  },
+  pages: {
+    signIn: '/login',
+    error: '/login',
+  },
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+}
+
+const handler = NextAuth(authOptions)
+export { handler as GET, handler as POST }

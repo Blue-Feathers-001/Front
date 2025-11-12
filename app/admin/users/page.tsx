@@ -170,7 +170,15 @@ export default function AdminUsersPage() {
   if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
+        <div className="glass-card-solid p-8 rounded-2xl">
+          <div className="flex items-center space-x-3">
+            <svg className="animate-spin h-8 w-8 text-primary-600" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span className="text-xl font-semibold text-gray-700">Loading...</span>
+          </div>
+        </div>
       </div>
     );
   }
@@ -180,46 +188,52 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-12 px-4">
+    <div className="min-h-screen py-12 px-4">
       <div className="container mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800">
-            User Management
-          </h1>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 animate-fadeInDown">
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-bold text-white drop-shadow-lg">
+              User Management
+            </h1>
+            <p className="text-white/90 mt-2">Manage all gym members and staff</p>
+          </div>
           <button
             onClick={openCreateModal}
-            className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-lg shadow-lg transition-all"
+            className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
           >
-            + Create New User
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Create New User
           </button>
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="glass-card-solid rounded-2xl shadow-2xl overflow-hidden animate-fadeInUp">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-blue-600 text-white">
+              <thead className="bg-gradient-to-r from-primary-600 to-primary-700 text-white">
                 <tr>
-                  <th className="px-6 py-3 text-left">Name</th>
-                  <th className="px-6 py-3 text-left">Email</th>
-                  <th className="px-6 py-3 text-left">Phone</th>
-                  <th className="px-6 py-3 text-left">Role</th>
-                  <th className="px-6 py-3 text-left">Status</th>
-                  <th className="px-6 py-3 text-left">Plan</th>
-                  <th className="px-6 py-3 text-left">Actions</th>
+                  <th className="px-6 py-4 text-left font-bold">Name</th>
+                  <th className="px-6 py-4 text-left font-bold">Email</th>
+                  <th className="px-6 py-4 text-left font-bold">Phone</th>
+                  <th className="px-6 py-4 text-left font-bold">Role</th>
+                  <th className="px-6 py-4 text-left font-bold">Status</th>
+                  <th className="px-6 py-4 text-left font-bold">Plan</th>
+                  <th className="px-6 py-4 text-left font-bold">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {users.map((user) => (
-                  <tr key={user._id} className="hover:bg-gray-50">
+                  <tr key={user._id} className="hover:bg-primary-50/50 transition-colors duration-150">
                     <td className="px-6 py-4">{user.name}</td>
                     <td className="px-6 py-4">{user.email}</td>
                     <td className="px-6 py-4">{user.phone}</td>
                     <td className="px-6 py-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-sm ${
+                        className={`px-3 py-1.5 rounded-lg text-sm font-semibold ${
                           user.role === 'admin'
-                            ? 'bg-purple-100 text-purple-600'
-                            : 'bg-gray-100 text-gray-600'
+                            ? 'bg-purple-100 text-purple-700 border border-purple-200'
+                            : 'bg-gray-100 text-gray-700 border border-gray-200'
                         }`}
                       >
                         {user.role}
@@ -227,12 +241,12 @@ export default function AdminUsersPage() {
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-sm ${
+                        className={`px-3 py-1.5 rounded-lg text-sm font-semibold ${
                           user.membershipStatus === 'active'
-                            ? 'bg-green-100 text-green-600'
+                            ? 'bg-green-100 text-green-700 border border-green-200'
                             : user.membershipStatus === 'expired'
-                            ? 'bg-red-100 text-red-600'
-                            : 'bg-gray-100 text-gray-600'
+                            ? 'bg-red-100 text-red-700 border border-red-200'
+                            : 'bg-gray-100 text-gray-700 border border-gray-200'
                         }`}
                       >
                         {user.membershipStatus}
@@ -242,18 +256,20 @@ export default function AdminUsersPage() {
                       {user.membershipPlan || '-'}
                     </td>
                     <td className="px-6 py-4">
-                      <button
-                        onClick={() => handleEdit(user)}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mr-2"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(user._id)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                      >
-                        Delete
-                      </button>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleEdit(user)}
+                          className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(user._id)}
+                          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -264,9 +280,19 @@ export default function AdminUsersPage() {
       </div>
 
       {isCreating && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg p-8 max-w-2xl w-full max-h-screen overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-6">Create New User</h2>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
+          <div className="glass-card-solid rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-fadeInUp">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-800">Create New User</h2>
+              <button
+                onClick={closeCreateModal}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
             <form onSubmit={handleCreate} className="space-y-4">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
@@ -280,7 +306,7 @@ export default function AdminUsersPage() {
                       setNewUser({ ...newUser, name: e.target.value })
                     }
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   />
                 </div>
                 <div>
@@ -294,7 +320,7 @@ export default function AdminUsersPage() {
                       setNewUser({ ...newUser, email: e.target.value })
                     }
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   />
                 </div>
                 <div>
@@ -309,7 +335,7 @@ export default function AdminUsersPage() {
                     }
                     required
                     minLength={6}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   />
                 </div>
                 <div>
@@ -322,7 +348,7 @@ export default function AdminUsersPage() {
                     onChange={(e) =>
                       setNewUser({ ...newUser, phone: e.target.value })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   />
                 </div>
                 <div>
@@ -334,7 +360,7 @@ export default function AdminUsersPage() {
                     onChange={(e) =>
                       setNewUser({ ...newUser, role: e.target.value })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   >
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
@@ -352,7 +378,7 @@ export default function AdminUsersPage() {
                         membershipStatus: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   >
                     <option value="inactive">Inactive</option>
                     <option value="active">Active</option>
@@ -371,7 +397,7 @@ export default function AdminUsersPage() {
                         membershipPlan: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   >
                     <option value="">None</option>
                     <option value="basic">Basic</option>
@@ -392,7 +418,7 @@ export default function AdminUsersPage() {
                         membershipStartDate: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   />
                 </div>
                 <div>
@@ -408,7 +434,7 @@ export default function AdminUsersPage() {
                         membershipEndDate: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   />
                 </div>
               </div>
@@ -416,14 +442,14 @@ export default function AdminUsersPage() {
               <div className="flex gap-4 mt-6">
                 <button
                   type="submit"
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg"
+                  className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   Create User
                 </button>
                 <button
                   type="button"
                   onClick={closeCreateModal}
-                  className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 rounded-lg"
+                  className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
                 >
                   Cancel
                 </button>
@@ -434,9 +460,19 @@ export default function AdminUsersPage() {
       )}
 
       {showModal && editingUser && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg p-8 max-w-2xl w-full max-h-screen overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-6">Edit User</h2>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
+          <div className="glass-card-solid rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-fadeInUp">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-800">Edit User</h2>
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
             <form onSubmit={handleUpdate} className="space-y-4">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
@@ -449,7 +485,7 @@ export default function AdminUsersPage() {
                     onChange={(e) =>
                       setEditingUser({ ...editingUser, name: e.target.value })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   />
                 </div>
                 <div>
@@ -462,7 +498,7 @@ export default function AdminUsersPage() {
                     onChange={(e) =>
                       setEditingUser({ ...editingUser, email: e.target.value })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   />
                 </div>
                 <div>
@@ -475,7 +511,7 @@ export default function AdminUsersPage() {
                     onChange={(e) =>
                       setEditingUser({ ...editingUser, phone: e.target.value })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   />
                 </div>
                 <div>
@@ -487,7 +523,7 @@ export default function AdminUsersPage() {
                     onChange={(e) =>
                       setEditingUser({ ...editingUser, role: e.target.value })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   >
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
@@ -505,7 +541,7 @@ export default function AdminUsersPage() {
                         membershipStatus: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   >
                     <option value="inactive">Inactive</option>
                     <option value="active">Active</option>
@@ -524,7 +560,7 @@ export default function AdminUsersPage() {
                         membershipPlan: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   >
                     <option value="">None</option>
                     <option value="basic">Basic</option>
@@ -549,7 +585,7 @@ export default function AdminUsersPage() {
                         membershipStartDate: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   />
                 </div>
                 <div>
@@ -569,7 +605,7 @@ export default function AdminUsersPage() {
                         membershipEndDate: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   />
                 </div>
               </div>
@@ -577,14 +613,14 @@ export default function AdminUsersPage() {
               <div className="flex gap-4 mt-6">
                 <button
                   type="submit"
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg"
+                  className="flex-1 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-bold py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   Update User
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 rounded-lg"
+                  className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
                 >
                   Cancel
                 </button>

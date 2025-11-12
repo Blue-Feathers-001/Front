@@ -28,7 +28,15 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
+        <div className="glass-card-solid p-8 rounded-2xl">
+          <div className="flex items-center space-x-3">
+            <svg className="animate-spin h-8 w-8 text-primary-600" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span className="text-xl font-semibold text-gray-700">Loading...</span>
+          </div>
+        </div>
       </div>
     );
   }
@@ -76,23 +84,27 @@ export default function DashboardPage() {
   const planDetails = user.membershipPlan ? getPlanDetails(user.membershipPlan) : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-4 sm:py-8 md:py-12 px-4">
+    <div className="min-h-screen py-4 sm:py-8 md:py-12 px-4">
       <div className="container mx-auto max-w-6xl">
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-2">
-          Welcome back, {user.name}!
-        </h1>
-        <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">Here's your membership overview</p>
+        <div className="animate-fadeInDown mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 drop-shadow-lg">
+            Welcome back, {user.name}!
+          </h1>
+          <p className="text-sm sm:text-base text-white/90 drop-shadow">Here's your membership overview</p>
+        </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 animate-fadeInUp">
+          <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-xs sm:text-sm font-medium text-gray-600">Membership Status</h3>
-              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-600">Membership Status</h3>
+              <div className="bg-gradient-to-br from-primary-500 to-primary-700 p-2 rounded-lg">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
             </div>
             <span
-              className={`inline-block px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-semibold text-xs sm:text-sm ${getMembershipStatusColor(
+              className={`inline-block px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-bold text-xs sm:text-sm shadow-md ${getMembershipStatusColor(
                 user.membershipStatus
               )}`}
             >
@@ -100,25 +112,29 @@ export default function DashboardPage() {
             </span>
           </div>
 
-          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
+          <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-xs sm:text-sm font-medium text-gray-600">Current Plan</h3>
-              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-              </svg>
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-600">Current Plan</h3>
+              <div className="bg-gradient-to-br from-purple-500 to-purple-700 p-2 rounded-lg">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+              </div>
             </div>
             <p className="text-xl sm:text-2xl font-bold text-gray-800 capitalize">
               {user.membershipPlan || 'No Plan'}
             </p>
-            {planDetails && <p className="text-xs sm:text-sm text-gray-600 mt-1">{planDetails.price}</p>}
+            {planDetails && <p className="text-xs sm:text-sm text-gray-600 mt-1 font-semibold">{planDetails.price}</p>}
           </div>
 
-          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
+          <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-xs sm:text-sm font-medium text-gray-600">Days Remaining</h3>
-              <svg className="w-6 h-6 sm:w-8 sm:h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-600">Days Remaining</h3>
+              <div className="bg-gradient-to-br from-green-500 to-green-700 p-2 rounded-lg">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
             </div>
             <p className="text-xl sm:text-2xl font-bold text-gray-800">
               {daysRemaining !== null ? (daysRemaining > 0 ? daysRemaining : 0) : '-'}
@@ -131,8 +147,8 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
-          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-6 animate-fadeInUp">
+          <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg">
             <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 mb-3 sm:mb-4 flex items-center">
               <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -172,7 +188,7 @@ export default function DashboardPage() {
           </div>
 
           {planDetails && (
-            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
+            <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg">
               <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 mb-3 sm:mb-4 flex items-center">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -198,24 +214,42 @@ export default function DashboardPage() {
         </div>
 
         {user.membershipStatus === 'inactive' && (
-          <div className="mt-6 sm:mt-8 bg-yellow-50 border-l-4 border-yellow-400 p-4 sm:p-6 rounded">
-            <h3 className="text-base sm:text-lg font-bold text-yellow-800 mb-2">
-              No Active Membership
-            </h3>
-            <p className="text-sm sm:text-base text-yellow-700">
-              Contact the gym administrator to activate your membership and choose a plan.
-            </p>
+          <div className="mt-6 sm:mt-8 glass-card-solid border-l-4 border-yellow-500 p-4 sm:p-6 rounded-xl shadow-lg animate-fadeInUp">
+            <div className="flex items-start">
+              <div className="bg-yellow-500 p-2 rounded-lg mr-3">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-2">
+                  No Active Membership
+                </h3>
+                <p className="text-sm sm:text-base text-gray-600">
+                  Contact the gym administrator to activate your membership and choose a plan.
+                </p>
+              </div>
+            </div>
           </div>
         )}
 
         {user.membershipStatus === 'expired' && (
-          <div className="mt-6 sm:mt-8 bg-red-50 border-l-4 border-red-400 p-4 sm:p-6 rounded">
-            <h3 className="text-base sm:text-lg font-bold text-red-800 mb-2">
-              Membership Expired
-            </h3>
-            <p className="text-sm sm:text-base text-red-700">
-              Your membership has expired. Please contact the gym to renew.
-            </p>
+          <div className="mt-6 sm:mt-8 glass-card-solid border-l-4 border-red-500 p-4 sm:p-6 rounded-xl shadow-lg animate-fadeInUp">
+            <div className="flex items-start">
+              <div className="bg-red-500 p-2 rounded-lg mr-3">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-2">
+                  Membership Expired
+                </h3>
+                <p className="text-sm sm:text-base text-gray-600">
+                  Your membership has expired. Please contact the gym to renew.
+                </p>
+              </div>
+            </div>
           </div>
         )}
       </div>

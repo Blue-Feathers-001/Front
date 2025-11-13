@@ -213,7 +213,7 @@ export default function PaymentPage() {
                 <h3 className="font-semibold text-purple-900 mb-2">Payment Method</h3>
                 <div className="flex items-center gap-3">
                   <img
-                    src="https://www.payhere.lk/downloads/images/payhere_long_banner.png"
+                    src="/payhere-logo.png"
                     alt="PayHere"
                     className="h-8"
                   />

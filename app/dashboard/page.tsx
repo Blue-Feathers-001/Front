@@ -3,6 +3,7 @@
 import { useAuth } from '@/lib/authContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import NotificationCenter from '@/components/NotificationCenter';
 
 export default function DashboardPage() {
   const { user, loading, isAuthenticated } = useAuth();
@@ -211,6 +212,11 @@ export default function DashboardPage() {
               </ul>
             </div>
           )}
+        </div>
+
+        {/* Notifications Section */}
+        <div className="mt-6 sm:mt-8 animate-fadeInUp">
+          <NotificationCenter maxDisplay={5} />
         </div>
 
         {user.membershipStatus === 'inactive' && (

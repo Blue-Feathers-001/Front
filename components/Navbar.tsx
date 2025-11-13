@@ -39,18 +39,32 @@ export default function Navbar() {
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center gap-4 lg:gap-6">
+            <Link
+              href="/packages"
+              className="text-white hover:text-primary-200 transition-colors font-medium"
+            >
+              Packages
+            </Link>
             {isAuthenticated ? (
               <>
                 <span className="text-sm text-white font-semibold bg-primary-700/60 px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/20">
                   Welcome, {user?.name}
                 </span>
                 {isAdmin ? (
-                  <Link
-                    href="/admin/users"
-                    className="text-white hover:text-primary-200 transition-colors font-medium"
-                  >
-                    Manage Users
-                  </Link>
+                  <>
+                    <Link
+                      href="/admin/users"
+                      className="text-white hover:text-primary-200 transition-colors font-medium"
+                    >
+                      Manage Users
+                    </Link>
+                    <Link
+                      href="/admin/packages"
+                      className="text-white hover:text-primary-200 transition-colors font-medium"
+                    >
+                      Manage Packages
+                    </Link>
+                  </>
                 ) : (
                   <Link
                     href="/dashboard"
@@ -88,19 +102,35 @@ export default function Navbar() {
         {/* Mobile menu */}
         {mobileMenuOpen && (
           <div className="md:hidden mt-4 pb-4 space-y-3 border-t border-white/20 pt-4 animate-fadeInDown">
+            <Link
+              href="/packages"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+            >
+              Packages
+            </Link>
             {isAuthenticated ? (
               <>
                 <div className="text-sm text-white font-semibold bg-primary-700/60 px-3 py-2 rounded-lg backdrop-blur-sm border border-white/20">
                   Welcome, {user?.name}
                 </div>
                 {isAdmin ? (
-                  <Link
-                    href="/admin/users"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
-                  >
-                    Manage Users
-                  </Link>
+                  <>
+                    <Link
+                      href="/admin/users"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      Manage Users
+                    </Link>
+                    <Link
+                      href="/admin/packages"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      Manage Packages
+                    </Link>
+                  </>
                 ) : (
                   <Link
                     href="/dashboard"

@@ -110,7 +110,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       toast.success('Login successful!');
 
-      if (user.role === 'admin') {
+      // Check for redirect URL in query params
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirect = urlParams.get('redirect');
+
+      if (redirect) {
+        router.push(redirect);
+      } else if (user.role === 'admin') {
         router.push('/admin/users');
       } else {
         router.push('/dashboard');

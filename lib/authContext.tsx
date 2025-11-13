@@ -18,6 +18,12 @@ interface User {
   membershipEndDate?: string;
   avatar?: string;
   authProvider?: string;
+  notificationPreferences?: {
+    email: boolean;
+    sms: boolean;
+    inApp: boolean;
+    reminderDays: number[];
+  };
 }
 
 interface AuthContextType {
@@ -27,6 +33,7 @@ interface AuthContextType {
   loginWithGoogle: () => Promise<void>;
   register: (name: string, email: string, password: string, phone: string) => Promise<void>;
   logout: () => void;
+  refreshUser: () => Promise<void>;
   isAuthenticated: boolean;
   isAdmin: boolean;
 }
@@ -173,6 +180,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     router.push('/login');
   }, [session, router]);
 
+  const refreshUser = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        const response = await axios.get(`${API_URL}/auth/me`);
+        setUser(response.data.user);
+
+        // Update localStorage with fresh user data
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+      }
+    } catch (error) {
+      console.error('Failed to refresh user data:', error);
+      // Don't remove token on refresh failure - user might still be logged in
+    }
+  }, [API_URL]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -182,6 +206,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         loginWithGoogle,
         register,
         logout,
+        refreshUser,
         isAuthenticated: !!user,
         isAdmin: user?.role === 'admin',
       }}

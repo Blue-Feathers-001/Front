@@ -96,6 +96,12 @@ export default function Navbar() {
                       Dashboard
                     </Link>
                     <Link
+                      href="/profile"
+                      className="text-white hover:text-primary-200 transition-colors font-medium"
+                    >
+                      Profile
+                    </Link>
+                    <Link
                       href="/dashboard#notifications"
                       className="relative text-white hover:text-primary-200 transition-colors p-2 rounded-lg hover:bg-white/10"
                       title="Notifications"
@@ -177,6 +183,13 @@ export default function Navbar() {
                       className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
                     >
                       Dashboard
+                    </Link>
+                    <Link
+                      href="/profile"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      Profile
                     </Link>
                     <Link
                       href="/dashboard#notifications"

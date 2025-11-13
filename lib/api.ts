@@ -151,4 +151,30 @@ export const notificationAPI = {
   },
 };
 
+// Auth/Profile API
+export const authAPI = {
+  updateProfile: async (profileData: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    notificationPreferences?: {
+      email?: boolean;
+      sms?: boolean;
+      inApp?: boolean;
+      reminderDays?: number[];
+    };
+  }) => {
+    const { data } = await api.put<ApiResponse<any>>('/auth/update-profile', profileData);
+    return data;
+  },
+
+  changePassword: async (passwordData: {
+    currentPassword: string;
+    newPassword: string;
+  }) => {
+    const { data } = await api.put<ApiResponse<void>>('/auth/change-password', passwordData);
+    return data;
+  },
+};
+
 export default api;

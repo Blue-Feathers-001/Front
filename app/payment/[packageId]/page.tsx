@@ -120,7 +120,7 @@ export default function PaymentPage() {
     );
   }
 
-  const finalPrice = pkg.discount && pkg.discount > 0 ? pkg.discountedPrice : pkg.price;
+  const finalPrice = pkg.discount && pkg.discount > 0 ? (pkg.discountedPrice || (pkg.price - (pkg.price * pkg.discount) / 100)) : pkg.price;
 
   return (
     <div className="min-h-screen py-12 px-4">

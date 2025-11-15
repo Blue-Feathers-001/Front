@@ -127,7 +127,7 @@ export default function PackagesPage() {
               <div className="p-6 bg-gray-50">
                 <div className="flex items-baseline gap-2 mb-2">
                   <span className="text-4xl font-bold text-gray-900">
-                    LKR {pkg.discount && pkg.discount > 0 ? pkg.discountedPrice.toFixed(2) : pkg.price.toFixed(2)}
+                    LKR {pkg.discount && pkg.discount > 0 ? (pkg.discountedPrice || (pkg.price - (pkg.price * pkg.discount) / 100)).toFixed(2) : pkg.price.toFixed(2)}
                   </span>
                   {pkg.discount && pkg.discount > 0 && (
                     <span className="text-xl text-gray-400 line-through">

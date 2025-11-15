@@ -14,7 +14,7 @@ export const authOptions: NextAuthOptions = {
       if (account && profile) {
         // Call backend to register/login OAuth user
         try {
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL as string
 
           const names = user.name?.split(' ') || ['', '']
           const firstName = names[0] || ''

@@ -7,7 +7,7 @@ import type {
   PaymentInitiateResponse,
 } from '@/types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
 
 // Create axios instance
 const api = axios.create({
@@ -90,6 +90,21 @@ export const paymentAPI = {
 
   getStats: async () => {
     const { data } = await api.get('/payments/stats');
+    return data;
+  },
+
+  getWeeklyReport: async (weeks?: number) => {
+    const { data } = await api.get('/payments/reports/weekly', { params: { weeks } });
+    return data;
+  },
+
+  getMonthlyReport: async (months?: number) => {
+    const { data } = await api.get('/payments/reports/monthly', { params: { months } });
+    return data;
+  },
+
+  getUserPaymentHistory: async (userId: string) => {
+    const { data } = await api.get(`/payments/user/${userId}`);
     return data;
   },
 };

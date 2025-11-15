@@ -16,6 +16,7 @@ interface User {
   membershipPlan?: string;
   membershipStartDate?: string;
   membershipEndDate?: string;
+  createdAt?: string;
 }
 
 export default function AdminUsersPage() {
@@ -38,7 +39,7 @@ export default function AdminUsersPage() {
   const { user, loading: authLoading, isAdmin } = useAuth();
   const router = useRouter();
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
 
   useEffect(() => {
     if (!authLoading && !isAdmin) {
@@ -219,6 +220,7 @@ export default function AdminUsersPage() {
                   <th className="px-6 py-4 text-left font-bold">Role</th>
                   <th className="px-6 py-4 text-left font-bold">Status</th>
                   <th className="px-6 py-4 text-left font-bold">Plan</th>
+                  <th className="px-6 py-4 text-left font-bold">Registered</th>
                   <th className="px-6 py-4 text-left font-bold">Actions</th>
                 </tr>
               </thead>
@@ -255,17 +257,32 @@ export default function AdminUsersPage() {
                     <td className="px-6 py-4 capitalize">
                       {user.membershipPlan || '-'}
                     </td>
+                    <td className="px-6 py-4 text-gray-600 text-sm">
+                      {user.createdAt
+                        ? new Date(user.createdAt).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                          })
+                        : '-'}
+                    </td>
                     <td className="px-6 py-4">
                       <div className="flex gap-2">
                         <button
+                          onClick={() => router.push(`/admin/users/${user._id}`)}
+                          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md text-sm"
+                        >
+                          View
+                        </button>
+                        <button
                           onClick={() => handleEdit(user)}
-                          className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md"
+                          className="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md text-sm"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => handleDelete(user._id)}
-                          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md"
+                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md text-sm"
                         >
                           Delete
                         </button>

@@ -86,6 +86,18 @@ export default function Navbar() {
                     >
                       Manage Packages
                     </Link>
+                    <Link
+                      href="/admin/revenue"
+                      className="text-white hover:text-primary-200 transition-colors font-medium"
+                    >
+                      Revenue Stats
+                    </Link>
+                    <Link
+                      href="/admin/reports/monthly"
+                      className="text-white hover:text-primary-200 transition-colors font-medium"
+                    >
+                      Reports
+                    </Link>
                   </>
                 ) : (
                   <>
@@ -173,6 +185,20 @@ export default function Navbar() {
                       className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
                     >
                       Manage Packages
+                    </Link>
+                    <Link
+                      href="/admin/revenue"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      Revenue Stats
+                    </Link>
+                    <Link
+                      href="/admin/reports/monthly"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      Reports
                     </Link>
                   </>
                 ) : (

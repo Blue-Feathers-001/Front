@@ -36,6 +36,29 @@ export default function AdminUsersPage() {
     membershipStartDate: '',
     membershipEndDate: '',
   });
+
+  // Filters and Search
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
+  const [filterPlan, setFilterPlan] = useState('');
+  const [filterJoinFrom, setFilterJoinFrom] = useState('');
+  const [filterJoinTo, setFilterJoinTo] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Bulk Actions
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [showBulkActions, setShowBulkActions] = useState(false);
+  const [bulkAction, setBulkAction] = useState('');
+  const [bulkUpdateData, setBulkUpdateData] = useState({
+    membershipStatus: '',
+    membershipPlan: '',
+  });
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalUsers, setTotalUsers] = useState(0);
+
   const { user, loading: authLoading, isAdmin } = useAuth();
   const router = useRouter();
 
@@ -49,17 +72,131 @@ export default function AdminUsersPage() {
     }
   }, [authLoading, isAdmin, router]);
 
+  useEffect(() => {
+    if (isAdmin) {
+      fetchUsers();
+    }
+  }, [searchQuery, filterStatus, filterPlan, filterJoinFrom, filterJoinTo, currentPage]);
+
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/users`, {
+      const params = new URLSearchParams();
+
+      if (searchQuery) params.append('search', searchQuery);
+      if (filterStatus) params.append('membershipStatus', filterStatus);
+      if (filterPlan) params.append('membershipPlan', filterPlan);
+      if (filterJoinFrom) params.append('joinDateFrom', filterJoinFrom);
+      if (filterJoinTo) params.append('joinDateTo', filterJoinTo);
+      params.append('page', currentPage.toString());
+      params.append('limit', '10');
+      params.append('sortBy', 'createdAt');
+      params.append('sortOrder', 'desc');
+
+      const response = await axios.get(`${API_URL}/users?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
       setUsers(response.data.users);
+      setTotalPages(response.data.pages || 1);
+      setTotalUsers(response.data.total || 0);
     } catch (error) {
       toast.error('Failed to fetch users');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setCurrentPage(1);
+  };
+
+  const handleFilterChange = () => {
+    setCurrentPage(1);
+  };
+
+  const clearFilters = () => {
+    setSearchQuery('');
+    setFilterStatus('');
+    setFilterPlan('');
+    setFilterJoinFrom('');
+    setFilterJoinTo('');
+    setCurrentPage(1);
+  };
+
+  const handleSelectAll = () => {
+    if (selectedUsers.length === users.length) {
+      setSelectedUsers([]);
+    } else {
+      setSelectedUsers(users.map((u) => u._id));
+    }
+  };
+
+  const handleSelectUser = (userId: string) => {
+    if (selectedUsers.includes(userId)) {
+      setSelectedUsers(selectedUsers.filter((id) => id !== userId));
+    } else {
+      setSelectedUsers([...selectedUsers, userId]);
+    }
+  };
+
+  const handleBulkUpdate = async () => {
+    if (selectedUsers.length === 0) {
+      toast.error('Please select users first');
+      return;
+    }
+
+    if (!bulkUpdateData.membershipStatus && !bulkUpdateData.membershipPlan) {
+      toast.error('Please select at least one field to update');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const updates: any = {};
+      if (bulkUpdateData.membershipStatus) updates.membershipStatus = bulkUpdateData.membershipStatus;
+      if (bulkUpdateData.membershipPlan) updates.membershipPlan = bulkUpdateData.membershipPlan;
+
+      await axios.post(
+        `${API_URL}/users/bulk/update`,
+        { userIds: selectedUsers, updates },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      toast.success(`${selectedUsers.length} users updated successfully`);
+      setSelectedUsers([]);
+      setShowBulkActions(false);
+      setBulkUpdateData({ membershipStatus: '', membershipPlan: '' });
+      fetchUsers();
+    } catch (error) {
+      toast.error('Failed to update users');
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedUsers.length === 0) {
+      toast.error('Please select users first');
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to delete ${selectedUsers.length} users? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(
+        `${API_URL}/users/bulk/delete`,
+        { userIds: selectedUsers },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      toast.success(`${selectedUsers.length} users deleted successfully`);
+      setSelectedUsers([]);
+      fetchUsers();
+    } catch (error) {
+      toast.error('Failed to delete users');
     }
   };
 
@@ -196,7 +333,7 @@ export default function AdminUsersPage() {
             <h1 className="text-3xl sm:text-4xl font-bold text-white drop-shadow-lg">
               User Management
             </h1>
-            <p className="text-white/90 mt-2">Manage all gym members and staff</p>
+            <p className="text-white/90 mt-2">Manage all gym members and staff ({totalUsers} total)</p>
           </div>
           <button
             onClick={openCreateModal}
@@ -209,11 +346,183 @@ export default function AdminUsersPage() {
           </button>
         </div>
 
+        {/* Search and Filter Section */}
+        <div className="glass-card-solid rounded-2xl shadow-lg p-6 mb-6 animate-fadeInUp">
+          <div className="flex flex-col md:flex-row gap-4 mb-4">
+            <div className="flex-1">
+              <div className="relative">
+                <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search by name, email, or phone..."
+                  value={searchQuery}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                />
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                Filters
+              </button>
+              {(searchQuery || filterStatus || filterPlan || filterJoinFrom || filterJoinTo) && (
+                <button
+                  onClick={clearFilters}
+                  className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          </div>
+
+          {showFilters && (
+            <div className="grid md:grid-cols-4 gap-4 pt-4 border-t-2 border-gray-200 dark:border-gray-600 animate-fadeIn">
+              <div>
+                <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">Status</label>
+                <select
+                  value={filterStatus}
+                  onChange={(e) => { setFilterStatus(e.target.value); handleFilterChange(); }}
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="">All Statuses</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                  <option value="expired">Expired</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">Plan</label>
+                <select
+                  value={filterPlan}
+                  onChange={(e) => { setFilterPlan(e.target.value); handleFilterChange(); }}
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="">All Plans</option>
+                  <option value="basic">Basic</option>
+                  <option value="premium">Premium</option>
+                  <option value="vip">VIP</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">Join From</label>
+                <input
+                  type="date"
+                  value={filterJoinFrom}
+                  onChange={(e) => { setFilterJoinFrom(e.target.value); handleFilterChange(); }}
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">Join To</label>
+                <input
+                  type="date"
+                  value={filterJoinTo}
+                  onChange={(e) => { setFilterJoinTo(e.target.value); handleFilterChange(); }}
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Bulk Actions Bar */}
+        {selectedUsers.length > 0 && (
+          <div className="glass-card-solid rounded-2xl shadow-lg p-4 mb-6 flex flex-wrap items-center gap-4 animate-fadeIn">
+            <span className="text-gray-700 dark:text-gray-300 font-medium">
+              {selectedUsers.length} user{selectedUsers.length > 1 ? 's' : ''} selected
+            </span>
+            <button
+              onClick={() => setShowBulkActions(!showBulkActions)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-all"
+            >
+              Bulk Update
+            </button>
+            <button
+              onClick={handleBulkDelete}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-all"
+            >
+              Bulk Delete
+            </button>
+            <button
+              onClick={() => setSelectedUsers([])}
+              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-all"
+            >
+              Clear Selection
+            </button>
+          </div>
+        )}
+
+        {/* Bulk Update Modal */}
+        {showBulkActions && (
+          <div className="glass-card-solid rounded-2xl shadow-lg p-6 mb-6 animate-fadeIn">
+            <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Bulk Update Settings</h3>
+            <div className="grid md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">Membership Status</label>
+                <select
+                  value={bulkUpdateData.membershipStatus}
+                  onChange={(e) => setBulkUpdateData({ ...bulkUpdateData, membershipStatus: e.target.value })}
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="">No Change</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                  <option value="expired">Expired</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">Membership Plan</label>
+                <select
+                  value={bulkUpdateData.membershipPlan}
+                  onChange={(e) => setBulkUpdateData({ ...bulkUpdateData, membershipPlan: e.target.value })}
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="">No Change</option>
+                  <option value="basic">Basic</option>
+                  <option value="premium">Premium</option>
+                  <option value="vip">VIP</option>
+                </select>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <button
+                onClick={handleBulkUpdate}
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-all"
+              >
+                Apply Updates
+              </button>
+              <button
+                onClick={() => setShowBulkActions(false)}
+                className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition-all"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="glass-card-solid rounded-2xl shadow-2xl overflow-hidden animate-fadeInUp">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gradient-to-r from-primary-600 to-primary-700 text-white">
                 <tr>
+                  <th className="px-6 py-4 text-left">
+                    <input
+                      type="checkbox"
+                      checked={selectedUsers.length === users.length && users.length > 0}
+                      onChange={handleSelectAll}
+                      className="w-5 h-5 rounded border-gray-300 dark:border-gray-600"
+                    />
+                  </th>
                   <th className="px-6 py-4 text-left font-bold">Name</th>
                   <th className="px-6 py-4 text-left font-bold">Email</th>
                   <th className="px-6 py-4 text-left font-bold">Phone</th>
@@ -224,18 +533,26 @@ export default function AdminUsersPage() {
                   <th className="px-6 py-4 text-left font-bold">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {users.map((user) => (
-                  <tr key={user._id} className="hover:bg-primary-50/50 transition-colors duration-150">
-                    <td className="px-6 py-4">{user.name}</td>
-                    <td className="px-6 py-4">{user.email}</td>
-                    <td className="px-6 py-4">{user.phone}</td>
+                  <tr key={user._id} className="hover:bg-primary-50/50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                    <td className="px-6 py-4">
+                      <input
+                        type="checkbox"
+                        checked={selectedUsers.includes(user._id)}
+                        onChange={() => handleSelectUser(user._id)}
+                        className="w-5 h-5 rounded border-gray-300 dark:border-gray-600"
+                      />
+                    </td>
+                    <td className="px-6 py-4 dark:text-gray-200">{user.name}</td>
+                    <td className="px-6 py-4 dark:text-gray-200">{user.email}</td>
+                    <td className="px-6 py-4 dark:text-gray-200">{user.phone}</td>
                     <td className="px-6 py-4">
                       <span
                         className={`px-3 py-1.5 rounded-lg text-sm font-semibold ${
                           user.role === 'admin'
-                            ? 'bg-purple-100 text-purple-700 border border-purple-200'
-                            : 'bg-gray-100 text-gray-700 border border-gray-200'
+                            ? 'bg-purple-100 text-purple-700 border border-purple-200 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-700'
+                            : 'bg-gray-100 text-gray-700 border border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600'
                         }`}
                       >
                         {user.role}
@@ -245,19 +562,19 @@ export default function AdminUsersPage() {
                       <span
                         className={`px-3 py-1.5 rounded-lg text-sm font-semibold ${
                           user.membershipStatus === 'active'
-                            ? 'bg-green-100 text-green-700 border border-green-200'
+                            ? 'bg-green-100 text-green-700 border border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-700'
                             : user.membershipStatus === 'expired'
-                            ? 'bg-red-100 text-red-700 border border-red-200'
-                            : 'bg-gray-100 text-gray-700 border border-gray-200'
+                            ? 'bg-red-100 text-red-700 border border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-700'
+                            : 'bg-gray-100 text-gray-700 border border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600'
                         }`}
                       >
                         {user.membershipStatus}
                       </span>
                     </td>
-                    <td className="px-6 py-4 capitalize">
+                    <td className="px-6 py-4 capitalize dark:text-gray-200">
                       {user.membershipPlan || '-'}
                     </td>
-                    <td className="px-6 py-4 text-gray-600 text-sm">
+                    <td className="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
                       {user.createdAt
                         ? new Date(user.createdAt).toLocaleDateString('en-US', {
                             year: 'numeric',
@@ -293,6 +610,50 @@ export default function AdminUsersPage() {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="bg-gray-50 dark:bg-gray-800 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="text-sm text-gray-700 dark:text-gray-300">
+                  Page {currentPage} of {totalPages}
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-600 transition-all dark:text-white"
+                  >
+                    Previous
+                  </button>
+                  {[...Array(Math.min(5, totalPages))].map((_, idx) => {
+                    const pageNum = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + idx;
+                    if (pageNum > totalPages) return null;
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => setCurrentPage(pageNum)}
+                        className={`px-4 py-2 rounded-lg transition-all ${
+                          currentPage === pageNum
+                            ? 'bg-primary-600 text-white'
+                            : 'bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 dark:text-white'
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  })}
+                  <button
+                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-600 transition-all dark:text-white"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

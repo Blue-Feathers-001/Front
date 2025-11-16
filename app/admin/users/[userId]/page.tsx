@@ -50,6 +50,19 @@ interface PaymentStats {
   totalSpent: number;
 }
 
+interface Note {
+  _id: string;
+  user: string;
+  createdBy: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export default function UserDetailPage() {
   const router = useRouter();
   const params = useParams();
@@ -59,10 +72,14 @@ export default function UserDetailPage() {
   const [user, setUser] = useState<UserDetails | null>(null);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [paymentStats, setPaymentStats] = useState<PaymentStats | null>(null);
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [newNoteContent, setNewNoteContent] = useState('');
+  const [addingNote, setAddingNote] = useState(false);
 
   useEffect(() => {
     if (userId) {
       fetchUserDetails();
+      fetchNotes();
     }
   }, [userId]);
 
@@ -89,6 +106,80 @@ export default function UserDetailPage() {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchNotes = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/notes/user/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setNotes(data.notes || []);
+      }
+    } catch (error) {
+      console.error('Error fetching notes:', error);
+    }
+  };
+
+  const handleAddNote = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newNoteContent.trim()) {
+      toast.error('Note content cannot be empty');
+      return;
+    }
+
+    try {
+      setAddingNote(true);
+      const token = localStorage.getItem('token');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/notes/user/${userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ content: newNoteContent }),
+      });
+
+      if (response.ok) {
+        toast.success('Note added successfully');
+        setNewNoteContent('');
+        fetchNotes();
+      } else {
+        const data = await response.json();
+        toast.error(data.message || 'Failed to add note');
+      }
+    } catch (error) {
+      toast.error('Failed to add note');
+    } finally {
+      setAddingNote(false);
+    }
+  };
+
+  const handleDeleteNote = async (noteId: string) => {
+    if (!confirm('Are you sure you want to delete this note?')) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/notes/${noteId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        toast.success('Note deleted successfully');
+        fetchNotes();
+      } else {
+        toast.error('Failed to delete note');
+      }
+    } catch (error) {
+      toast.error('Failed to delete note');
     }
   };
 
@@ -295,7 +386,7 @@ export default function UserDetailPage() {
 
         {/* Membership Information */}
         <div className="glass-card-solid p-6 rounded-xl shadow-lg mb-8 animate-fadeInUp">
-          <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
             <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
             </svg>
@@ -303,37 +394,113 @@ export default function UserDetailPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div>
-              <p className="text-sm text-gray-600 mb-1">Status</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Status</p>
               <span className={`inline-block px-3 py-1.5 rounded-lg text-sm font-semibold border ${getMembershipStatusColor(user.membershipStatus)}`}>
                 {user.membershipStatus}
               </span>
             </div>
             <div>
-              <p className="text-sm text-gray-600 mb-1">Current Plan</p>
-              <p className="text-lg font-semibold text-gray-800 capitalize">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Current Plan</p>
+              <p className="text-lg font-semibold text-gray-800 dark:text-gray-200 capitalize">
                 {user.membershipPackage?.name || user.membershipPlan || '-'}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600 mb-1">Start Date</p>
-              <p className="text-lg font-semibold text-gray-800">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Start Date</p>
+              <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">
                 {user.membershipStartDate ? formatDate(user.membershipStartDate) : '-'}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600 mb-1">End Date</p>
-              <p className="text-lg font-semibold text-gray-800">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">End Date</p>
+              <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">
                 {user.membershipEndDate ? formatDate(user.membershipEndDate) : '-'}
               </p>
             </div>
           </div>
           {user.gracePeriodEndDate && (
-            <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-sm text-yellow-800">
+            <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-lg">
+              <p className="text-sm text-yellow-800 dark:text-yellow-200">
                 <span className="font-semibold">Grace Period:</span> Valid until {formatDate(user.gracePeriodEndDate)}
               </p>
             </div>
           )}
+        </div>
+
+        {/* Admin Notes */}
+        <div className="glass-card-solid p-6 rounded-xl shadow-lg mb-8 animate-fadeInUp">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+            <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            Admin Notes
+          </h2>
+
+          {/* Add Note Form */}
+          <form onSubmit={handleAddNote} className="mb-6">
+            <div className="flex gap-3">
+              <textarea
+                value={newNoteContent}
+                onChange={(e) => setNewNoteContent(e.target.value)}
+                placeholder="Add a note about this member..."
+                rows={3}
+                className="flex-1 px-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all resize-none"
+              />
+              <button
+                type="submit"
+                disabled={addingNote || !newNoteContent.trim()}
+                className="px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-all duration-200 self-start"
+              >
+                {addingNote ? 'Adding...' : 'Add Note'}
+              </button>
+            </div>
+          </form>
+
+          {/* Notes List */}
+          <div className="space-y-4">
+            {notes.length > 0 ? (
+              notes.map((note) => (
+                <div key={note._id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
+                  <div className="flex justify-between items-start gap-3">
+                    <div className="flex-1">
+                      <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap">{note.content}</p>
+                      <div className="flex items-center gap-3 mt-3 text-sm text-gray-600 dark:text-gray-400">
+                        <span className="flex items-center gap-1">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                          </svg>
+                          {note.createdBy.name}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          {formatDateTime(note.createdAt)}
+                        </span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleDeleteNote(note._id)}
+                      className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors p-2 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg"
+                      title="Delete note"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                <svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                <p className="text-lg font-medium">No notes yet</p>
+                <p className="text-sm mt-1">Add a note about this member using the form above</p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Payment History */}

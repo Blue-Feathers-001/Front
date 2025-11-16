@@ -5,10 +5,20 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import NotificationCenter from '@/components/NotificationCenter';
 
+interface Announcement {
+  _id: string;
+  title: string;
+  content: string;
+  type: 'general' | 'urgent' | 'maintenance' | 'event' | 'promotion';
+  createdAt: string;
+}
+
 export default function DashboardPage() {
   const { user, loading, isAuthenticated } = useAuth();
   const router = useRouter();
   const [daysRemaining, setDaysRemaining] = useState<number | null>(null);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [announcementsLoading, setAnnouncementsLoading] = useState(true);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -25,6 +35,31 @@ export default function DashboardPage() {
       setDaysRemaining(daysDiff);
     }
   }, [user]);
+
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(`${apiUrl}/announcements?activeOnly=true`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setAnnouncements(data.announcements.slice(0, 3)); // Show only latest 3
+        }
+      } catch (error) {
+        console.error('Error fetching announcements:', error);
+      } finally {
+        setAnnouncementsLoading(false);
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchAnnouncements();
+    }
+  }, [isAuthenticated]);
 
   if (loading) {
     return (
@@ -54,6 +89,21 @@ export default function DashboardPage() {
         return 'text-red-600 bg-red-100';
       default:
         return 'text-gray-600 bg-gray-100';
+    }
+  };
+
+  const getAnnouncementTypeColor = (type: string) => {
+    switch (type) {
+      case 'urgent':
+        return 'bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-700';
+      case 'maintenance':
+        return 'bg-yellow-100 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-700';
+      case 'event':
+        return 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-700';
+      case 'promotion':
+        return 'bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-700';
+      default:
+        return 'bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600';
     }
   };
 
@@ -147,6 +197,54 @@ export default function DashboardPage() {
             )}
           </div>
         </div>
+
+        {/* Announcements Section */}
+        {!announcementsLoading && announcements.length > 0 && (
+          <div className="mb-6 sm:mb-8 animate-fadeInUp">
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 flex items-center drop-shadow-lg">
+              <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+              </svg>
+              Latest Announcements
+            </h2>
+            <div className="space-y-4">
+              {announcements.map((announcement) => (
+                <div
+                  key={announcement._id}
+                  className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0">
+                      <svg className="w-8 h-8 sm:w-10 sm:h-10 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className={`px-3 py-1 rounded-lg text-xs sm:text-sm font-semibold border capitalize ${getAnnouncementTypeColor(announcement.type)}`}>
+                          {announcement.type}
+                        </span>
+                        <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                          {new Date(announcement.createdAt).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                          })}
+                        </span>
+                      </div>
+                      <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-white mb-2">
+                        {announcement.title}
+                      </h3>
+                      <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                        {announcement.content}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="grid md:grid-cols-2 gap-4 sm:gap-6 animate-fadeInUp">
           <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg">

@@ -108,7 +108,7 @@ export default function MonthlyReportsPage() {
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             ></path>
           </svg>
-          <span className="text-xl font-semibold text-gray-700">Loading monthly report...</span>
+          <span className="text-xl font-semibold text-gray-700 dark:text-gray-200">Loading monthly report...</span>
         </div>
       </div>
     );
@@ -150,7 +150,7 @@ export default function MonthlyReportsPage() {
             <div className="glass-card-solid p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm font-medium">Total Revenue</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Revenue</p>
                   <p className="text-2xl font-bold text-primary-600 mt-1">
                     {formatCurrency(summary.totalRevenue)}
                   </p>
@@ -166,7 +166,7 @@ export default function MonthlyReportsPage() {
             <div className="glass-card-solid p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm font-medium">Avg Monthly Revenue</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Avg Monthly Revenue</p>
                   <p className="text-2xl font-bold text-green-600 mt-1">
                     {formatCurrency(summary.averageMonthlyRevenue)}
                   </p>
@@ -182,7 +182,7 @@ export default function MonthlyReportsPage() {
             <div className="glass-card-solid p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm font-medium">Total Transactions</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Transactions</p>
                   <p className="text-2xl font-bold text-blue-600 mt-1">{summary.totalTransactions}</p>
                 </div>
                 <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-3 rounded-lg">
@@ -196,9 +196,9 @@ export default function MonthlyReportsPage() {
             <div className="glass-card-solid p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm font-medium">Active Members</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Active Members</p>
                   <p className="text-2xl font-bold text-purple-600 mt-1">{summary.activeMembers}</p>
-                  <p className="text-xs text-gray-500 mt-1">of {summary.totalUsers} total</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">of {summary.totalUsers} total</p>
                 </div>
                 <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-3 rounded-lg">
                   <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -236,10 +236,10 @@ export default function MonthlyReportsPage() {
                         key={index}
                         className="hover:bg-primary-50/50 transition-colors duration-150"
                       >
-                        <td className="px-6 py-4 text-gray-800 font-medium">
+                        <td className="px-6 py-4 text-gray-800 dark:text-gray-200 font-medium">
                           {getMonthName(month._id.month)}
                         </td>
-                        <td className="px-6 py-4 text-gray-700">{month._id.year}</td>
+                        <td className="px-6 py-4 text-gray-700 dark:text-gray-300">{month._id.year}</td>
                         <td className="px-6 py-4 text-right">
                           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-800">
                             {month.count}
@@ -248,7 +248,7 @@ export default function MonthlyReportsPage() {
                         <td className="px-6 py-4 text-right font-semibold text-green-700">
                           {formatCurrency(month.revenue)}
                         </td>
-                        <td className="px-6 py-4 text-right text-gray-600">
+                        <td className="px-6 py-4 text-right text-gray-600 dark:text-gray-300">
                           {formatCurrency(month.revenue / month.count)}
                         </td>
                         <td className="px-6 py-4 text-right">
@@ -263,7 +263,7 @@ export default function MonthlyReportsPage() {
                   })
                 ) : (
                   <tr>
-                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                       <svg
                         className="mx-auto h-12 w-12 text-gray-400 mb-4"
                         fill="none"
@@ -298,16 +298,16 @@ export default function MonthlyReportsPage() {
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                       Package Name
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                       Sales Count
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                       Total Revenue
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                       Revenue Share
                     </th>
                   </tr>
@@ -319,7 +319,7 @@ export default function MonthlyReportsPage() {
 
                     return (
                       <tr key={index} className="hover:bg-gray-50 transition-colors duration-150">
-                        <td className="px-6 py-4 text-gray-800 font-medium">{pkg._id}</td>
+                        <td className="px-6 py-4 text-gray-800 dark:text-gray-200 font-medium">{pkg._id}</td>
                         <td className="px-6 py-4 text-right">
                           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-purple-100 text-purple-800">
                             {pkg.count}
@@ -336,7 +336,7 @@ export default function MonthlyReportsPage() {
                                 style={{ width: `${share}%` }}
                               ></div>
                             </div>
-                            <span className="text-sm font-semibold text-gray-700 w-12 text-right">
+                            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 w-12 text-right">
                               {share.toFixed(1)}%
                             </span>
                           </div>

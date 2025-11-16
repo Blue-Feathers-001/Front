@@ -105,7 +105,7 @@ export default function WeeklyReportsPage() {
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             ></path>
           </svg>
-          <span className="text-xl font-semibold text-gray-700">Loading weekly report...</span>
+          <span className="text-xl font-semibold text-gray-700 dark:text-gray-200">Loading weekly report...</span>
         </div>
       </div>
     );
@@ -148,7 +148,7 @@ export default function WeeklyReportsPage() {
             <div className="glass-card-solid p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm font-medium">Total Revenue</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Revenue</p>
                   <p className="text-3xl font-bold text-primary-600 mt-1">
                     {formatCurrency(summary.totalRevenue)}
                   </p>
@@ -164,7 +164,7 @@ export default function WeeklyReportsPage() {
             <div className="glass-card-solid p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm font-medium">Total Transactions</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Transactions</p>
                   <p className="text-3xl font-bold text-green-600 mt-1">{summary.totalTransactions}</p>
                 </div>
                 <div className="bg-gradient-to-br from-green-500 to-green-600 p-4 rounded-lg">
@@ -178,9 +178,9 @@ export default function WeeklyReportsPage() {
             <div className="glass-card-solid p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm font-medium">Active Members</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Active Members</p>
                   <p className="text-3xl font-bold text-blue-600 mt-1">{summary.activeMembers}</p>
-                  <p className="text-sm text-gray-500 mt-1">of {summary.totalUsers} total</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">of {summary.totalUsers} total</p>
                 </div>
                 <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-4 rounded-lg">
                   <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -213,11 +213,11 @@ export default function WeeklyReportsPage() {
                       key={index}
                       className="hover:bg-primary-50/50 transition-colors duration-150"
                     >
-                      <td className="px-6 py-4 text-gray-800 font-medium">
+                      <td className="px-6 py-4 text-gray-800 dark:text-gray-200 font-medium">
                         {getWeekRange(week.weekStart)}
                       </td>
-                      <td className="px-6 py-4 text-gray-700">{week._id.year}</td>
-                      <td className="px-6 py-4 text-gray-700">Week {week._id.week}</td>
+                      <td className="px-6 py-4 text-gray-700 dark:text-gray-300">{week._id.year}</td>
+                      <td className="px-6 py-4 text-gray-700 dark:text-gray-300">Week {week._id.week}</td>
                       <td className="px-6 py-4 text-right">
                         <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-800">
                           {week.count}
@@ -226,14 +226,14 @@ export default function WeeklyReportsPage() {
                       <td className="px-6 py-4 text-right font-semibold text-green-700">
                         {formatCurrency(week.revenue)}
                       </td>
-                      <td className="px-6 py-4 text-right text-gray-600">
+                      <td className="px-6 py-4 text-right text-gray-600 dark:text-gray-300">
                         {formatCurrency(week.revenue / week.count)}
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                       <svg
                         className="mx-auto h-12 w-12 text-gray-400 mb-4"
                         fill="none"
@@ -261,16 +261,16 @@ export default function WeeklyReportsPage() {
         {summary && weeklyData.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8 animate-fadeInUp">
             <div className="glass-card-solid p-6 rounded-xl shadow-lg">
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Average Weekly Performance</h3>
+              <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">Average Weekly Performance</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Avg Weekly Revenue:</span>
+                  <span className="text-gray-600 dark:text-gray-300">Avg Weekly Revenue:</span>
                   <span className="font-semibold text-primary-700">
                     {formatCurrency(summary.totalRevenue / summary.totalWeeks)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Avg Weekly Transactions:</span>
+                  <span className="text-gray-600 dark:text-gray-300">Avg Weekly Transactions:</span>
                   <span className="font-semibold text-green-700">
                     {(summary.totalTransactions / summary.totalWeeks).toFixed(1)}
                   </span>
@@ -279,10 +279,10 @@ export default function WeeklyReportsPage() {
             </div>
 
             <div className="glass-card-solid p-6 rounded-xl shadow-lg">
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Membership Status</h3>
+              <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">Membership Status</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Active Rate:</span>
+                  <span className="text-gray-600 dark:text-gray-300">Active Rate:</span>
                   <span className="font-semibold text-green-700">
                     {summary.totalUsers > 0
                       ? ((summary.activeMembers / summary.totalUsers) * 100).toFixed(1)
@@ -290,7 +290,7 @@ export default function WeeklyReportsPage() {
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Expired Members:</span>
+                  <span className="text-gray-600 dark:text-gray-300">Expired Members:</span>
                   <span className="font-semibold text-red-700">{summary.expiredMembers}</span>
                 </div>
               </div>

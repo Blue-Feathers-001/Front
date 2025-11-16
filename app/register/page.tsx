@@ -43,15 +43,15 @@ export default function RegisterPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
             </svg>
           </div>
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">
+          <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
             Create Account
           </h2>
-          <p className="text-gray-600">Join Blue Feathers Gym today</p>
+          <p className="text-gray-600 dark:text-gray-300">Join Blue Feathers Gym today</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-2">
               Full Name
             </label>
             <input
@@ -66,7 +66,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-2">
               Email
             </label>
             <input
@@ -81,7 +81,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-2">
               Phone
             </label>
             <input
@@ -96,7 +96,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-2">
               Password
             </label>
             <input
@@ -109,7 +109,7 @@ export default function RegisterPage() {
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
               placeholder="••••••••"
             />
-            <p className="mt-1 text-sm text-gray-500">Must be at least 6 characters</p>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Must be at least 6 characters</p>
           </div>
 
           <button
@@ -129,7 +129,7 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        <p className="mt-8 text-center text-gray-600">
+        <p className="mt-8 text-center text-gray-600 dark:text-gray-300">
           Already have an account?{' '}
           <Link href="/login" className="text-primary-600 hover:text-primary-700 font-semibold">
             Login here

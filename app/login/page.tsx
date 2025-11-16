@@ -43,15 +43,15 @@ export default function LoginPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
             </svg>
           </div>
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">
+          <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
             Welcome Back
           </h2>
-          <p className="text-gray-600">Login to access your account</p>
+          <p className="text-gray-600 dark:text-gray-300">Login to access your account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-gray-700 font-semibold mb-2">
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-2">
               Email / Username
             </label>
             <input
@@ -66,7 +66,7 @@ export default function LoginPage() {
 
           <div>
             <div className="flex justify-between items-center mb-2">
-              <label className="block text-gray-700 font-semibold">
+              <label className="block text-gray-700 dark:text-gray-200 font-semibold">
                 Password
               </label>
               <Link href="/forgot-password" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
@@ -106,7 +106,7 @@ export default function LoginPage() {
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-3 bg-white text-gray-500 font-medium">Or continue with</span>
+              <span className="px-3 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 font-medium">Or continue with</span>
             </div>
           </div>
 
@@ -137,7 +137,7 @@ export default function LoginPage() {
           </button>
         </div>
 
-        <p className="mt-8 text-center text-gray-600">
+        <p className="mt-8 text-center text-gray-600 dark:text-gray-300">
           Don't have an account?{' '}
           <Link href="/register" className="text-primary-600 hover:text-primary-700 font-semibold">
             Register here

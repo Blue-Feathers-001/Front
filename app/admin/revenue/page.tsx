@@ -78,7 +78,7 @@ export default function RevenueStatsPage() {
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             ></path>
           </svg>
-          <span className="text-xl font-semibold text-gray-700">Loading statistics...</span>
+          <span className="text-xl font-semibold text-gray-700 dark:text-gray-200">Loading statistics...</span>
         </div>
       </div>
     );
@@ -124,9 +124,9 @@ export default function RevenueStatsPage() {
                     </svg>
                   </div>
                 </div>
-                <h3 className="text-gray-600 text-sm font-medium mb-1">Total Revenue (All Time)</h3>
+                <h3 className="text-gray-600 dark:text-gray-400 text-sm font-medium mb-1">Total Revenue (All Time)</h3>
                 <p className="text-3xl font-bold text-primary-600">{formatCurrency(stats.totalRevenue)}</p>
-                <div className="mt-4 flex items-center text-sm text-gray-600">
+                <div className="mt-4 flex items-center text-sm text-gray-600 dark:text-gray-400">
                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -143,9 +143,9 @@ export default function RevenueStatsPage() {
                     </svg>
                   </div>
                 </div>
-                <h3 className="text-gray-600 text-sm font-medium mb-1">Monthly Revenue (Last 30 Days)</h3>
+                <h3 className="text-gray-600 dark:text-gray-400 text-sm font-medium mb-1">Monthly Revenue (Last 30 Days)</h3>
                 <p className="text-3xl font-bold text-green-600">{formatCurrency(stats.monthlyRevenue)}</p>
-                <div className="mt-4 flex items-center text-sm text-gray-600">
+                <div className="mt-4 flex items-center text-sm text-gray-600 dark:text-gray-400">
                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
@@ -162,7 +162,7 @@ export default function RevenueStatsPage() {
                     </svg>
                   </div>
                 </div>
-                <h3 className="text-gray-600 text-sm font-medium mb-1">Payment Success Rate</h3>
+                <h3 className="text-gray-600 dark:text-gray-400 text-sm font-medium mb-1">Payment Success Rate</h3>
                 <p className="text-3xl font-bold text-blue-600">{stats.successRate.toFixed(1)}%</p>
                 <div className="mt-4">
                   <div className="w-full bg-gray-200 rounded-full h-2.5">
@@ -192,12 +192,12 @@ export default function RevenueStatsPage() {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Successful Payments</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Successful Payments</p>
                         <p className="text-2xl font-bold text-green-700">{stats.successfulPayments}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-gray-600">Revenue</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Revenue</p>
                       <p className="text-lg font-semibold text-green-700">{formatCurrency(stats.totalRevenue)}</p>
                     </div>
                   </div>
@@ -210,12 +210,12 @@ export default function RevenueStatsPage() {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Failed Payments</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Failed Payments</p>
                         <p className="text-2xl font-bold text-red-700">{stats.failedPayments}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-gray-600">Failure Rate</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Failure Rate</p>
                       <p className="text-lg font-semibold text-red-700">
                         {stats.totalPayments > 0 ? ((stats.failedPayments / stats.totalPayments) * 100).toFixed(1) : 0}%
                       </p>
@@ -230,12 +230,12 @@ export default function RevenueStatsPage() {
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Pending Payments</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Pending Payments</p>
                         <p className="text-2xl font-bold text-yellow-700">{stats.pendingPayments}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-gray-600">Pending Rate</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Pending Rate</p>
                       <p className="text-lg font-semibold text-yellow-700">
                         {stats.totalPayments > 0 ? ((stats.pendingPayments / stats.totalPayments) * 100).toFixed(1) : 0}%
                       </p>
@@ -251,23 +251,23 @@ export default function RevenueStatsPage() {
                   <p className="text-white/80 text-sm mt-1">Key performance indicators</p>
                 </div>
                 <div className="p-6 space-y-4">
-                  <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-                    <span className="text-gray-600 font-medium">Total Transactions</span>
+                  <div className="flex justify-between items-center pb-4 border-b border-gray-200 dark:border-gray-700">
+                    <span className="text-gray-600 dark:text-gray-300 font-medium">Total Transactions</span>
                     <span className="text-2xl font-bold text-primary-600">{stats.totalPayments}</span>
                   </div>
 
-                  <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-                    <span className="text-gray-600 font-medium">Average Transaction Value</span>
-                    <span className="text-xl font-bold text-gray-800">
+                  <div className="flex justify-between items-center pb-4 border-b border-gray-200 dark:border-gray-700">
+                    <span className="text-gray-600 dark:text-gray-300 font-medium">Average Transaction Value</span>
+                    <span className="text-xl font-bold text-gray-800 dark:text-white">
                       {stats.successfulPayments > 0
                         ? formatCurrency(stats.totalRevenue / stats.successfulPayments)
                         : formatCurrency(0)}
                     </span>
                   </div>
 
-                  <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-                    <span className="text-gray-600 font-medium">Monthly Average Transaction Value</span>
-                    <span className="text-xl font-bold text-gray-800">
+                  <div className="flex justify-between items-center pb-4 border-b border-gray-200 dark:border-gray-700">
+                    <span className="text-gray-600 dark:text-gray-300 font-medium">Monthly Average Transaction Value</span>
+                    <span className="text-xl font-bold text-gray-800 dark:text-white">
                       {stats.monthlyRevenue > 0 && stats.totalPayments > 0
                         ? formatCurrency(stats.monthlyRevenue / Math.max(1, Math.round(stats.successfulPayments * (30 / 365))))
                         : formatCurrency(0)}
@@ -277,7 +277,7 @@ export default function RevenueStatsPage() {
                   <div className="mt-6 p-4 bg-gradient-to-r from-primary-50 to-purple-50 rounded-lg border border-primary-200">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-gray-600 mb-1">Revenue Health Score</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Revenue Health Score</p>
                         <p className="text-3xl font-bold text-primary-700">
                           {stats.successRate > 80 ? 'Excellent' : stats.successRate > 60 ? 'Good' : 'Needs Attention'}
                         </p>
@@ -303,7 +303,7 @@ export default function RevenueStatsPage() {
 
             {/* Quick Actions */}
             <div className="glass-card-solid p-6 rounded-xl shadow-lg animate-fadeInUp">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
+              <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Quick Actions</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <button
                   onClick={() => router.push('/admin/reports/weekly')}
@@ -314,7 +314,7 @@ export default function RevenueStatsPage() {
                   </svg>
                   <div className="text-left">
                     <p className="font-semibold text-primary-700">Weekly Report</p>
-                    <p className="text-xs text-gray-600">View weekly data</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">View weekly data</p>
                   </div>
                 </button>
 
@@ -327,7 +327,7 @@ export default function RevenueStatsPage() {
                   </svg>
                   <div className="text-left">
                     <p className="font-semibold text-green-700">Monthly Report</p>
-                    <p className="text-xs text-gray-600">View monthly data</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">View monthly data</p>
                   </div>
                 </button>
 
@@ -340,7 +340,7 @@ export default function RevenueStatsPage() {
                   </svg>
                   <div className="text-left">
                     <p className="font-semibold text-blue-700">Manage Users</p>
-                    <p className="text-xs text-gray-600">View all members</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">View all members</p>
                   </div>
                 </button>
 
@@ -353,7 +353,7 @@ export default function RevenueStatsPage() {
                   </svg>
                   <div className="text-left">
                     <p className="font-semibold text-purple-700">Manage Packages</p>
-                    <p className="text-xs text-gray-600">View all plans</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">View all plans</p>
                   </div>
                 </button>
               </div>

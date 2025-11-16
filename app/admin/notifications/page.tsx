@@ -210,17 +210,6 @@ export default function AdminNotificationsPage() {
             </button>
           </form>
         </div>
-
-        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h3 className="font-semibold text-blue-900 mb-2">Testing Instructions:</h3>
-          <ol className="list-decimal list-inside space-y-1 text-sm text-blue-800">
-            <li>Open this page in one browser window (admin view)</li>
-            <li>Open the application in another window and login as a regular user</li>
-            <li>Send a notification from this page</li>
-            <li>Watch the notification appear in real-time in the user's navbar</li>
-            <li>Check the browser console for Socket.IO connection logs</li>
-          </ol>
-        </div>
       </div>
     </div>
   );

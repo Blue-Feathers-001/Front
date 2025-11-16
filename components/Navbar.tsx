@@ -284,7 +284,7 @@ export default function Navbar() {
 
                       {/* Notification Dropdown */}
                       {notificationDropdownOpen && (
-                        <div className="absolute right-0 mt-2 w-96 max-w-[calc(100vw-2rem)] bg-white/95 backdrop-blur-xl rounded-xl shadow-2xl border border-white/20 overflow-hidden animate-fadeInDown z-50">
+                        <div className="absolute right-0 mt-2 w-96 max-w-[calc(100vw-2rem)] bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-xl shadow-2xl border border-white/20 dark:border-gray-600/40 overflow-hidden animate-fadeInDown z-50">
                           <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-primary-600 to-primary-700">
                             <div className="flex items-center justify-between">
                               <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -322,29 +322,29 @@ export default function Navbar() {
                                 <svg className="w-16 h-16 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                                 </svg>
-                                <p className="text-gray-600 font-semibold">No notifications</p>
-                                <p className="text-sm text-gray-500 mt-1">You're all caught up!</p>
+                                <p className="text-gray-600 dark:text-gray-300 font-semibold">No notifications</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">You're all caught up!</p>
                               </div>
                             ) : (
-                              <div className="divide-y divide-gray-100">
+                              <div className="divide-y divide-gray-100 dark:divide-gray-700">
                                 {notifications.map((notification) => (
                                   <div
                                     key={notification._id}
-                                    className={`p-4 hover:bg-gray-50/80 transition cursor-pointer ${
-                                      !notification.isRead ? 'bg-blue-50/50' : ''
+                                    className={`p-4 hover:bg-gray-50/80 dark:hover:bg-gray-700/50 transition cursor-pointer ${
+                                      !notification.isRead ? 'bg-blue-50/50 dark:bg-blue-900/20' : ''
                                     }`}
                                   >
                                     <div className="flex items-start gap-3">
                                       <span className="text-2xl flex-shrink-0">{getNotificationIcon(notification.type)}</span>
                                       <div className="flex-1 min-w-0">
-                                        <h4 className="text-sm font-semibold text-gray-800 mb-1 break-words">
+                                        <h4 className="text-sm font-semibold text-gray-800 dark:text-white mb-1 break-words">
                                           {notification.title}
                                         </h4>
-                                        <p className="text-xs text-gray-600 mb-2 break-words line-clamp-2">
+                                        <p className="text-xs text-gray-600 dark:text-gray-300 mb-2 break-words line-clamp-2">
                                           {notification.message}
                                         </p>
                                         <div className="flex items-center justify-between gap-2">
-                                          <span className="text-xs text-gray-500">{formatDate(notification.createdAt)}</span>
+                                          <span className="text-xs text-gray-500 dark:text-gray-400">{formatDate(notification.createdAt)}</span>
                                           {!notification.isRead && (
                                             <button
                                               onClick={() => handleMarkAsRead(notification._id)}
@@ -363,11 +363,11 @@ export default function Navbar() {
                           </div>
 
                           {notifications.length > 0 && (
-                            <div className="p-3 border-t border-gray-200 bg-gray-50/80">
+                            <div className="p-3 border-t border-gray-200 dark:border-gray-600 bg-gray-50/80 dark:bg-gray-700/50">
                               <Link
                                 href="/dashboard#notifications"
                                 onClick={() => setNotificationDropdownOpen(false)}
-                                className="block text-center text-sm font-semibold text-primary-600 hover:text-primary-700 transition"
+                                className="block text-center text-sm font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition"
                               >
                                 View All Notifications
                               </Link>

@@ -158,7 +158,7 @@ export default function NotificationCenter({ maxDisplay = 5 }: NotificationCente
   return (
     <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg">
       <div className="flex items-center justify-between mb-4 sm:mb-6">
-        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 flex items-center">
+        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white flex items-center">
           <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
           </svg>
@@ -184,8 +184,8 @@ export default function NotificationCenter({ maxDisplay = 5 }: NotificationCente
           <svg className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
           </svg>
-          <p className="text-sm sm:text-base text-gray-600 font-semibold">No notifications yet</p>
-          <p className="text-xs sm:text-sm text-gray-500 mt-1">We'll notify you about important updates</p>
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 font-semibold">No notifications yet</p>
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">We'll notify you about important updates</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -194,15 +194,15 @@ export default function NotificationCenter({ maxDisplay = 5 }: NotificationCente
               key={notification._id}
               className={`p-3 sm:p-4 rounded-lg border transition-all duration-300 hover:shadow-md ${
                 notification.isRead
-                  ? 'bg-white/50 border-gray-200'
-                  : 'bg-blue-50/80 border-blue-200'
+                  ? 'bg-white/50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600'
+                  : 'bg-blue-50/80 dark:bg-blue-900/30 border-blue-200 dark:border-blue-700'
               }`}
             >
               <div className="flex items-start gap-3">
                 {getNotificationIcon(notification.type)}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2 mb-1">
-                    <h3 className="text-sm sm:text-base font-semibold text-gray-800 break-words">
+                    <h3 className="text-sm sm:text-base font-semibold text-gray-800 dark:text-white break-words">
                       {notification.title}
                     </h3>
                     <button
@@ -215,9 +215,9 @@ export default function NotificationCenter({ maxDisplay = 5 }: NotificationCente
                       </svg>
                     </button>
                   </div>
-                  <p className="text-xs sm:text-sm text-gray-600 mb-2 break-words">{notification.message}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-2 break-words">{notification.message}</p>
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs text-gray-500">{formatDate(notification.createdAt)}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">{formatDate(notification.createdAt)}</span>
                     {!notification.isRead && (
                       <button
                         onClick={() => handleMarkAsRead(notification._id)}

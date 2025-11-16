@@ -187,7 +187,7 @@ export default function AdminPackagesPage() {
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            <span className="text-xl font-semibold text-gray-700">Loading...</span>
+            <span className="text-xl font-semibold text-gray-700 dark:text-gray-200">Loading...</span>
           </div>
         </div>
       </div>
@@ -217,14 +217,14 @@ export default function AdminPackagesPage() {
           {packages.map((pkg) => (
             <div
               key={pkg._id}
-              className={`bg-white rounded-xl shadow-md p-6 ${
+              className={`bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 ${
                 !pkg.isActive ? 'opacity-60' : ''
               }`}
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">{pkg.name}</h3>
-                  <span className="text-sm text-gray-500 capitalize">{pkg.category}</span>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">{pkg.name}</h3>
+                  <span className="text-sm text-gray-500 dark:text-gray-400 capitalize">{pkg.category}</span>
                 </div>
                 <span
                   className={`px-3 py-1 rounded-full text-xs font-semibold ${
@@ -237,7 +237,7 @@ export default function AdminPackagesPage() {
                 </span>
               </div>
 
-              <p className="text-gray-600 text-sm mb-4">{pkg.description}</p>
+              <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{pkg.description}</p>
 
               <div className="mb-4">
                 <div className="flex items-baseline gap-2">
@@ -250,7 +250,7 @@ export default function AdminPackagesPage() {
                     </span>
                   )}
                 </div>
-                <p className="text-sm text-gray-500">{pkg.durationMonths} month(s)</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{pkg.durationMonths} month(s)</p>
                 {pkg.discount && pkg.discount > 0 && (
                   <span className="text-sm text-green-600 font-semibold">
                     {pkg.discount}% off
@@ -259,16 +259,16 @@ export default function AdminPackagesPage() {
               </div>
 
               <div className="mb-4">
-                <h4 className="font-semibold text-gray-700 mb-2 text-sm">Features:</h4>
+                <h4 className="font-semibold text-gray-700 dark:text-gray-200 mb-2 text-sm">Features:</h4>
                 <ul className="space-y-1">
                   {pkg.features.slice(0, 3).map((feature, index) => (
-                    <li key={index} className="text-sm text-gray-600 flex items-start">
+                    <li key={index} className="text-sm text-gray-600 dark:text-gray-300 flex items-start">
                       <span className="text-purple-600 mr-2">✓</span>
                       {feature}
                     </li>
                   ))}
                   {pkg.features.length > 3 && (
-                    <li className="text-sm text-gray-500">
+                    <li className="text-sm text-gray-500 dark:text-gray-400">
                       +{pkg.features.length - 3} more...
                     </li>
                   )}
@@ -276,7 +276,7 @@ export default function AdminPackagesPage() {
               </div>
 
               {pkg.maxMembers && (
-                <div className="mb-4 text-sm text-gray-600">
+                <div className="mb-4 text-sm text-gray-600 dark:text-gray-300">
                   <span className="font-semibold">{pkg.currentMembers}</span> /{' '}
                   {pkg.maxMembers} members
                 </div>
@@ -308,7 +308,7 @@ export default function AdminPackagesPage() {
 
         {packages.length === 0 && (
           <div className="text-center py-12 glass-card-solid rounded-xl shadow-2xl">
-            <p className="text-gray-600 text-lg font-semibold">No packages yet. Create your first package!</p>
+            <p className="text-gray-600 dark:text-gray-300 text-lg font-semibold">No packages yet. Create your first package!</p>
           </div>
         )}
       </div>
@@ -318,7 +318,7 @@ export default function AdminPackagesPage() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto animate-fadeIn">
           <div className="glass-card-solid rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-fadeInUp">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
                 {editingPackage ? 'Edit Package' : 'Create New Package'}
               </h2>
               <button
@@ -337,7 +337,7 @@ export default function AdminPackagesPage() {
 
             <form onSubmit={editingPackage ? handleUpdate : handleCreate} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                   Package Name *
                 </label>
                 <input
@@ -345,20 +345,20 @@ export default function AdminPackagesPage() {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   placeholder="e.g., Premium Yearly"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                   Description *
                 </label>
                 <textarea
                   required
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   rows={3}
                   placeholder="Describe this package..."
                 />
@@ -366,7 +366,7 @@ export default function AdminPackagesPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                     Duration (months) *
                   </label>
                   <input
@@ -378,12 +378,12 @@ export default function AdminPackagesPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, durationMonths: parseInt(e.target.value) })
                     }
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                     Price (LKR) *
                   </label>
                   <input
@@ -394,14 +394,14 @@ export default function AdminPackagesPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, price: parseFloat(e.target.value) })
                     }
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                     Category *
                   </label>
                   <select
@@ -413,7 +413,7 @@ export default function AdminPackagesPage() {
                         category: e.target.value as 'basic' | 'premium' | 'vip' | 'custom',
                       })
                     }
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   >
                     <option value="basic">Basic</option>
                     <option value="premium">Premium</option>
@@ -423,7 +423,7 @@ export default function AdminPackagesPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                     Discount (%)
                   </label>
                   <input
@@ -434,13 +434,13 @@ export default function AdminPackagesPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, discount: parseFloat(e.target.value) })
                     }
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                   Max Members (optional)
                 </label>
                 <input
@@ -453,14 +453,14 @@ export default function AdminPackagesPage() {
                       maxMembers: e.target.value ? parseInt(e.target.value) : undefined,
                     })
                   }
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   placeholder="Leave empty for unlimited"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between items-center mb-2">
-                  <label className="block text-sm font-medium text-gray-700">Features *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Features *</label>
                   <button
                     type="button"
                     onClick={addFeature}
@@ -476,7 +476,7 @@ export default function AdminPackagesPage() {
                         type="text"
                         value={feature}
                         onChange={(e) => updateFeature(index, e.target.value)}
-                        className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="flex-1 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                         placeholder={`Feature ${index + 1}`}
                       />
                       {formData.features.length > 1 && (

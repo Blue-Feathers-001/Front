@@ -240,18 +240,18 @@ export default function AnnouncementsPage() {
                         {announcement.type}
                       </span>
                       {!announcement.isActive && (
-                        <span className="px-3 py-1 rounded-lg text-sm font-semibold bg-gray-100 text-gray-700 border border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">
+                        <span className="px-3 py-1 rounded-lg text-sm font-semibold bg-gray-100 text-gray-700 border border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600">
                           Inactive
                         </span>
                       )}
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+                    <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">
                       {announcement.title}
                     </h3>
-                    <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap mb-4">
+                    <p className="text-gray-700 dark:text-gray-200 whitespace-pre-wrap mb-4">
                       {announcement.content}
                     </p>
-                    <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-300">
                       <span className="flex items-center gap-1">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -265,7 +265,7 @@ export default function AnnouncementsPage() {
                         {formatDate(announcement.createdAt)}
                       </span>
                       {announcement.expiresAt && (
-                        <span className="flex items-center gap-1 text-red-600 dark:text-red-400">
+                        <span className="flex items-center gap-1 text-red-600 dark:text-red-300">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
@@ -303,10 +303,10 @@ export default function AnnouncementsPage() {
             ))
           ) : (
             <div className="glass-card-solid rounded-xl shadow-lg p-12 text-center">
-              <svg className="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
               </svg>
-              <p className="text-xl font-medium text-gray-700 dark:text-gray-300 mb-2">No announcements yet</p>
+              <p className="text-xl font-medium text-gray-700 dark:text-gray-200 mb-2">No announcements yet</p>
               <p className="text-gray-600 dark:text-gray-400">Create your first announcement to get started</p>
             </div>
           )}

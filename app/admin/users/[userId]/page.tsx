@@ -309,7 +309,7 @@ export default function UserDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 animate-fadeInUp">
           {/* Personal Information */}
           <div className="lg:col-span-2 glass-card-solid p-6 rounded-xl shadow-lg">
-            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
               <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
@@ -317,36 +317,36 @@ export default function UserDetailPage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-600">Full Name</p>
-                <p className="text-lg font-semibold text-gray-800">{user.name}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Full Name</p>
+                <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">{user.name}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Email</p>
-                <p className="text-lg font-semibold text-gray-800">{user.email}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Email</p>
+                <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">{user.email}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Phone</p>
-                <p className="text-lg font-semibold text-gray-800">{user.phone || '-'}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Phone</p>
+                <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">{user.phone || '-'}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Role</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Role</p>
                 <span
                   className={`inline-block px-3 py-1 rounded-lg text-sm font-semibold border ${
                     user.role === 'admin'
-                      ? 'bg-purple-100 text-purple-700 border-purple-200'
-                      : 'bg-gray-100 text-gray-700 border-gray-200'
+                      ? 'bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-700'
+                      : 'bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600'
                   }`}
                 >
                   {user.role}
                 </span>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Registered Date</p>
-                <p className="text-lg font-semibold text-gray-800">{formatDate(user.createdAt)}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Registered Date</p>
+                <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">{formatDate(user.createdAt)}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Last Payment</p>
-                <p className="text-lg font-semibold text-gray-800">
+                <p className="text-sm text-gray-600 dark:text-gray-400">Last Payment</p>
+                <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">
                   {user.lastPaymentDate ? formatDate(user.lastPaymentDate) : '-'}
                 </p>
               </div>
@@ -356,28 +356,28 @@ export default function UserDetailPage() {
           {/* Payment Statistics */}
           {paymentStats && (
             <div className="glass-card-solid p-6 rounded-xl shadow-lg">
-              <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
                 <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
                 Payment Stats
               </h2>
               <div className="space-y-4">
-                <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-                  <span className="text-gray-600">Total Payments</span>
-                  <span className="text-2xl font-bold text-primary-600">{paymentStats.totalPayments}</span>
+                <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
+                  <span className="text-gray-600 dark:text-gray-400">Total Payments</span>
+                  <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">{paymentStats.totalPayments}</span>
                 </div>
-                <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-                  <span className="text-gray-600">Successful</span>
-                  <span className="text-xl font-semibold text-green-600">{paymentStats.successfulPayments}</span>
+                <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
+                  <span className="text-gray-600 dark:text-gray-400">Successful</span>
+                  <span className="text-xl font-semibold text-green-600 dark:text-green-400">{paymentStats.successfulPayments}</span>
                 </div>
-                <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-                  <span className="text-gray-600">Failed</span>
-                  <span className="text-xl font-semibold text-red-600">{paymentStats.failedPayments}</span>
+                <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
+                  <span className="text-gray-600 dark:text-gray-400">Failed</span>
+                  <span className="text-xl font-semibold text-red-600 dark:text-red-400">{paymentStats.failedPayments}</span>
                 </div>
                 <div className="flex justify-between items-center pt-2">
-                  <span className="text-gray-600 font-medium">Total Spent</span>
-                  <span className="text-xl font-bold text-primary-700">{formatCurrency(paymentStats.totalSpent)}</span>
+                  <span className="text-gray-600 dark:text-gray-400 font-medium">Total Spent</span>
+                  <span className="text-xl font-bold text-primary-700 dark:text-primary-400">{formatCurrency(paymentStats.totalSpent)}</span>
                 </div>
               </div>
             </div>
@@ -505,7 +505,7 @@ export default function UserDetailPage() {
 
         {/* Payment History */}
         <div className="glass-card-solid rounded-2xl shadow-2xl overflow-hidden animate-fadeInUp">
-          <div className="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-primary-600 to-primary-700">
+          <div className="px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-primary-600 to-primary-700">
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
@@ -516,35 +516,35 @@ export default function UserDetailPage() {
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-50 dark:bg-gray-800">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Date</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Order ID</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Package</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Method</th>
-                  <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">Amount</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Membership Period</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Order ID</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Package</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Method</th>
+                  <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Amount</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Membership Period</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {payments.length > 0 ? (
                   payments.map((payment) => (
-                    <tr key={payment._id} className="hover:bg-gray-50 transition-colors duration-150">
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                    <tr key={payment._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                      <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                         {formatDateTime(payment.createdAt)}
                       </td>
-                      <td className="px-6 py-4 text-sm font-mono text-gray-800">
+                      <td className="px-6 py-4 text-sm font-mono text-gray-800 dark:text-gray-200">
                         {payment.orderId}
                       </td>
                       <td className="px-6 py-4">
                         <div>
-                          <p className="text-sm font-semibold text-gray-800">{payment.package?.name || '-'}</p>
-                          <p className="text-xs text-gray-500 capitalize">{payment.package?.category || '-'}</p>
+                          <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{payment.package?.name || '-'}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">{payment.package?.category || '-'}</p>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">{payment.paymentMethod}</td>
-                      <td className="px-6 py-4 text-right font-semibold text-gray-800">
+                      <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{payment.paymentMethod}</td>
+                      <td className="px-6 py-4 text-right font-semibold text-gray-800 dark:text-gray-200">
                         {formatCurrency(payment.amount)}
                       </td>
                       <td className="px-6 py-4">
@@ -552,11 +552,11 @@ export default function UserDetailPage() {
                           {payment.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                         {payment.membershipStartDate && payment.membershipEndDate ? (
                           <div>
                             <p>{formatDate(payment.membershipStartDate)}</p>
-                            <p className="text-xs text-gray-500">to {formatDate(payment.membershipEndDate)}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-500">to {formatDate(payment.membershipEndDate)}</p>
                           </div>
                         ) : (
                           '-'
@@ -566,9 +566,9 @@ export default function UserDetailPage() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan={7} className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                       <svg
-                        className="mx-auto h-12 w-12 text-gray-400 mb-4"
+                        className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"

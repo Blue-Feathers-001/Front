@@ -147,7 +147,7 @@ export default function DashboardPage() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 animate-fadeInUp">
           <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-xs sm:text-sm font-semibold text-gray-600">Membership Status</h3>
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300">Membership Status</h3>
               <div className="bg-gradient-to-br from-primary-500 to-primary-700 p-2 rounded-lg">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -165,33 +165,33 @@ export default function DashboardPage() {
 
           <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-xs sm:text-sm font-semibold text-gray-600">Current Plan</h3>
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300">Current Plan</h3>
               <div className="bg-gradient-to-br from-purple-500 to-purple-700 p-2 rounded-lg">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                 </svg>
               </div>
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-gray-800 capitalize">
+            <p className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100 capitalize">
               {user.membershipPlan || 'No Plan'}
             </p>
-            {planDetails && <p className="text-xs sm:text-sm text-gray-600 mt-1 font-semibold">{planDetails.price}</p>}
+            {planDetails && <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 font-semibold">{planDetails.price}</p>}
           </div>
 
           <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-xs sm:text-sm font-semibold text-gray-600">Days Remaining</h3>
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300">Days Remaining</h3>
               <div className="bg-gradient-to-br from-green-500 to-green-700 p-2 rounded-lg">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-gray-800">
+            <p className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">
               {daysRemaining !== null ? (daysRemaining > 0 ? daysRemaining : 0) : '-'}
             </p>
             {user.membershipEndDate && (
-              <p className="text-xs sm:text-sm text-gray-600 mt-1">
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
                 Until {new Date(user.membershipEndDate).toLocaleDateString()}
               </p>
             )}
@@ -248,35 +248,35 @@ export default function DashboardPage() {
 
         <div className="grid md:grid-cols-2 gap-4 sm:gap-6 animate-fadeInUp">
           <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg">
-            <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 mb-3 sm:mb-4 flex items-center">
+            <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4 flex items-center">
               <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
               Profile Information
             </h2>
             <div className="space-y-3 sm:space-y-4">
-              <div className="flex items-center border-b border-gray-200 pb-2 sm:pb-3">
+              <div className="flex items-center border-b border-gray-200 dark:border-gray-700 pb-2 sm:pb-3">
                 <div className="flex-1">
-                  <p className="text-gray-600 text-xs sm:text-sm">Full Name</p>
-                  <p className="text-base sm:text-lg font-semibold break-words">{user.name}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">Full Name</p>
+                  <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 break-words">{user.name}</p>
                 </div>
               </div>
-              <div className="flex items-center border-b border-gray-200 pb-2 sm:pb-3">
+              <div className="flex items-center border-b border-gray-200 dark:border-gray-700 pb-2 sm:pb-3">
                 <div className="flex-1">
-                  <p className="text-gray-600 text-xs sm:text-sm">Email Address</p>
-                  <p className="text-base sm:text-lg font-semibold break-all">{user.email}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">Email Address</p>
+                  <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 break-all">{user.email}</p>
                 </div>
               </div>
-              <div className="flex items-center border-b border-gray-200 pb-2 sm:pb-3">
+              <div className="flex items-center border-b border-gray-200 dark:border-gray-700 pb-2 sm:pb-3">
                 <div className="flex-1">
-                  <p className="text-gray-600 text-xs sm:text-sm">Phone Number</p>
-                  <p className="text-base sm:text-lg font-semibold">{user.phone || 'Not provided'}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">Phone Number</p>
+                  <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100">{user.phone || 'Not provided'}</p>
                 </div>
               </div>
               <div className="flex items-center">
                 <div className="flex-1">
-                  <p className="text-gray-600 text-xs sm:text-sm">Member Since</p>
-                  <p className="text-base sm:text-lg font-semibold">
+                  <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">Member Since</p>
+                  <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100">
                     {user.membershipStartDate
                       ? new Date(user.membershipStartDate).toLocaleDateString()
                       : 'N/A'}
@@ -288,7 +288,7 @@ export default function DashboardPage() {
 
           {planDetails && (
             <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg">
-              <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 mb-3 sm:mb-4 flex items-center">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4 flex items-center">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                 </svg>
@@ -304,7 +304,7 @@ export default function DashboardPage() {
                     <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 sm:mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-sm sm:text-base text-gray-700">{feature}</span>
+                    <span className="text-sm sm:text-base text-gray-700 dark:text-gray-300">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -326,10 +326,10 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-2">
+                <h3 className="text-base sm:text-lg font-bold text-gray-800 dark:text-white mb-2">
                   No Active Membership
                 </h3>
-                <p className="text-sm sm:text-base text-gray-600">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
                   Contact the gym administrator to activate your membership and choose a plan.
                 </p>
               </div>
@@ -346,10 +346,10 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-2">
+                <h3 className="text-base sm:text-lg font-bold text-gray-800 dark:text-white mb-2">
                   Membership Expired
                 </h3>
-                <p className="text-sm sm:text-base text-gray-600">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
                   Your membership has expired. Please contact the gym to renew.
                 </p>
               </div>

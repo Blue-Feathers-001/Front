@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useAuth } from '@/lib/authContext';
+import { useSocket } from '@/lib/socketContext';
 import { useState, useEffect, useRef } from 'react';
 import { notificationAPI } from '@/lib/api';
 import type { Notification } from '@/types';
@@ -9,6 +10,7 @@ import toast from 'react-hot-toast';
 
 export default function Navbar() {
   const { user, logout, isAuthenticated, isAdmin } = useAuth();
+  const { unreadCount: socketUnreadCount, notifications: socketNotifications, connected } = useSocket();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
@@ -16,12 +18,27 @@ export default function Navbar() {
   const [loadingNotifications, setLoadingNotifications] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // Update local state when socket provides new unread count
+  useEffect(() => {
+    setUnreadCount(socketUnreadCount);
+  }, [socketUnreadCount]);
+
+  // Merge socket notifications with existing notifications
+  useEffect(() => {
+    if (socketNotifications.length > 0) {
+      setNotifications((prev) => {
+        // Add new socket notifications that aren't already in the list
+        const existingIds = new Set(prev.map(n => n._id));
+        const newNotifications = socketNotifications.filter(n => !existingIds.has(n._id));
+        return [...newNotifications, ...prev];
+      });
+    }
+  }, [socketNotifications]);
+
+  // Fetch initial unread count on mount
   useEffect(() => {
     if (isAuthenticated && !isAdmin) {
       fetchUnreadCount();
-      // Poll for new notifications every 30 seconds
-      const interval = setInterval(fetchUnreadCount, 30000);
-      return () => clearInterval(interval);
     }
   }, [isAuthenticated, isAdmin]);
 
@@ -195,6 +212,12 @@ export default function Navbar() {
                       className="text-white hover:text-primary-200 transition-colors font-medium"
                     >
                       Reports
+                    </Link>
+                    <Link
+                      href="/admin/notifications"
+                      className="text-white hover:text-primary-200 transition-colors font-medium"
+                    >
+                      Send Notifications
                     </Link>
                   </>
                 ) : (
@@ -393,6 +416,13 @@ export default function Navbar() {
                       className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
                     >
                       Reports
+                    </Link>
+                    <Link
+                      href="/admin/notifications"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      Send Notifications
                     </Link>
                   </>
                 ) : (

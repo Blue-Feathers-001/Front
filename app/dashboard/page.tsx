@@ -147,7 +147,7 @@ export default function DashboardPage() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 animate-fadeInUp">
           <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300">Membership Status</h3>
+              <h3 className="text-xs sm:text-sm font-bold text-gray-700 dark:text-white">Membership Status</h3>
               <div className="bg-gradient-to-br from-primary-500 to-primary-700 p-2 rounded-lg">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -165,33 +165,33 @@ export default function DashboardPage() {
 
           <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300">Current Plan</h3>
+              <h3 className="text-xs sm:text-sm font-bold text-gray-700 dark:text-white">Current Plan</h3>
               <div className="bg-gradient-to-br from-purple-500 to-purple-700 p-2 rounded-lg">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                 </svg>
               </div>
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100 capitalize">
+            <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white capitalize">
               {user.membershipPlan || 'No Plan'}
             </p>
-            {planDetails && <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 font-semibold">{planDetails.price}</p>}
+            {planDetails && <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1 font-semibold">{planDetails.price}</p>}
           </div>
 
           <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300">Days Remaining</h3>
+              <h3 className="text-xs sm:text-sm font-bold text-gray-700 dark:text-white">Days Remaining</h3>
               <div className="bg-gradient-to-br from-green-500 to-green-700 p-2 rounded-lg">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">
+            <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
               {daysRemaining !== null ? (daysRemaining > 0 ? daysRemaining : 0) : '-'}
             </p>
             {user.membershipEndDate && (
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1">
                 Until {new Date(user.membershipEndDate).toLocaleDateString()}
               </p>
             )}
@@ -215,7 +215,7 @@ export default function DashboardPage() {
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0">
-                      <svg className="w-8 h-8 sm:w-10 sm:h-10 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-8 h-8 sm:w-10 sm:h-10 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
                       </svg>
                     </div>
@@ -224,7 +224,7 @@ export default function DashboardPage() {
                         <span className={`px-3 py-1 rounded-lg text-xs sm:text-sm font-semibold border capitalize ${getAnnouncementTypeColor(announcement.type)}`}>
                           {announcement.type}
                         </span>
-                        <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                           {new Date(announcement.createdAt).toLocaleDateString('en-US', {
                             year: 'numeric',
                             month: 'short',
@@ -235,7 +235,7 @@ export default function DashboardPage() {
                       <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-white mb-2">
                         {announcement.title}
                       </h3>
-                      <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                      <p className="text-sm sm:text-base text-gray-700 dark:text-gray-200 whitespace-pre-wrap">
                         {announcement.content}
                       </p>
                     </div>
@@ -255,28 +255,28 @@ export default function DashboardPage() {
               Profile Information
             </h2>
             <div className="space-y-3 sm:space-y-4">
-              <div className="flex items-center border-b border-gray-200 dark:border-gray-700 pb-2 sm:pb-3">
+              <div className="flex items-center border-b border-gray-200 dark:border-gray-600 pb-2 sm:pb-3">
                 <div className="flex-1">
-                  <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">Full Name</p>
-                  <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 break-words">{user.name}</p>
+                  <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm font-medium">Full Name</p>
+                  <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white break-words">{user.name}</p>
                 </div>
               </div>
-              <div className="flex items-center border-b border-gray-200 dark:border-gray-700 pb-2 sm:pb-3">
+              <div className="flex items-center border-b border-gray-200 dark:border-gray-600 pb-2 sm:pb-3">
                 <div className="flex-1">
-                  <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">Email Address</p>
-                  <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 break-all">{user.email}</p>
+                  <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm font-medium">Email Address</p>
+                  <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white break-all">{user.email}</p>
                 </div>
               </div>
-              <div className="flex items-center border-b border-gray-200 dark:border-gray-700 pb-2 sm:pb-3">
+              <div className="flex items-center border-b border-gray-200 dark:border-gray-600 pb-2 sm:pb-3">
                 <div className="flex-1">
-                  <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">Phone Number</p>
-                  <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100">{user.phone || 'Not provided'}</p>
+                  <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm font-medium">Phone Number</p>
+                  <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white">{user.phone || 'Not provided'}</p>
                 </div>
               </div>
               <div className="flex items-center">
                 <div className="flex-1">
-                  <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">Member Since</p>
-                  <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100">
+                  <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm font-medium">Member Since</p>
+                  <p className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white">
                     {user.membershipStartDate
                       ? new Date(user.membershipStartDate).toLocaleDateString()
                       : 'N/A'}
@@ -301,10 +301,10 @@ export default function DashboardPage() {
               <ul className="space-y-2 sm:space-y-3">
                 {planDetails.features.map((feature, index) => (
                   <li key={index} className="flex items-start">
-                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 sm:mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 dark:text-green-400 mr-2 sm:mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-sm sm:text-base text-gray-700 dark:text-gray-300">{feature}</span>
+                    <span className="text-sm sm:text-base text-gray-700 dark:text-gray-200">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -329,7 +329,7 @@ export default function DashboardPage() {
                 <h3 className="text-base sm:text-lg font-bold text-gray-800 dark:text-white mb-2">
                   No Active Membership
                 </h3>
-                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
+                <p className="text-sm sm:text-base text-gray-700 dark:text-gray-200">
                   Contact the gym administrator to activate your membership and choose a plan.
                 </p>
               </div>
@@ -349,7 +349,7 @@ export default function DashboardPage() {
                 <h3 className="text-base sm:text-lg font-bold text-gray-800 dark:text-white mb-2">
                   Membership Expired
                 </h3>
-                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
+                <p className="text-sm sm:text-base text-gray-700 dark:text-gray-200">
                   Your membership has expired. Please contact the gym to renew.
                 </p>
               </div>

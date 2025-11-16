@@ -15,7 +15,7 @@ function PaymentSuccessContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center px-4">
-      <div className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl p-8 md:p-12 text-center">
+      <div className="max-w-2xl w-full bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 md:p-12 text-center">
         {/* Success Icon */}
         <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <svg
@@ -34,22 +34,22 @@ function PaymentSuccessContent() {
         </div>
 
         {/* Success Message */}
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
           Payment Successful!
         </h1>
-        <p className="text-xl text-gray-600 mb-2">
+        <p className="text-xl text-gray-600 dark:text-gray-300 mb-2">
           Your membership has been activated
         </p>
         {orderId && (
-          <p className="text-sm text-gray-500 mb-8">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
             Order ID: <span className="font-mono font-semibold">{orderId}</span>
           </p>
         )}
 
         {/* What's Next */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 text-left">
-          <h2 className="font-bold text-blue-900 mb-4 text-center">What's Next?</h2>
-          <ul className="space-y-3 text-blue-800">
+        <div className="bg-blue-50 dark:bg-gray-700 border border-blue-200 dark:border-gray-600 rounded-lg p-6 mb-8 text-left">
+          <h2 className="font-bold text-blue-900 dark:text-gray-200 mb-4 text-center">What's Next?</h2>
+          <ul className="space-y-3 text-blue-800 dark:text-gray-300">
             <li className="flex items-start">
               <svg
                 className="w-5 h-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0"
@@ -127,14 +127,14 @@ function PaymentSuccessContent() {
           </Link>
           <Link
             href="/packages"
-            className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-300 transition"
+            className="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 py-3 px-6 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition"
           >
             Browse More Packages
           </Link>
         </div>
 
         {/* Footer Note */}
-        <p className="text-sm text-gray-500 mt-8">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-8">
           Need help? Contact us at{' '}
           <a href="mailto:support@bluefeathersgym.com" className="text-purple-600 hover:underline">
             support@bluefeathersgym.com
@@ -151,7 +151,7 @@ export default function PaymentSuccessPage() {
       <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-300">Loading...</p>
         </div>
       </div>
     }>

@@ -103,7 +103,7 @@ export default function PaymentPage() {
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            <span className="text-xl font-semibold text-gray-700">Loading...</span>
+            <span className="text-xl font-semibold text-gray-700 dark:text-gray-200">Loading...</span>
           </div>
         </div>
       </div>
@@ -114,7 +114,7 @@ export default function PaymentPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="glass-card-solid p-8 rounded-2xl">
-          <p className="text-xl text-gray-600 font-semibold">Package not found</p>
+          <p className="text-xl text-gray-600 dark:text-gray-300 font-semibold">Package not found</p>
         </div>
       </div>
     );
@@ -132,18 +132,18 @@ export default function PaymentPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fadeInUp">
           {/* Package Summary */}
           <div className="glass-card-solid rounded-2xl shadow-2xl p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Package Details</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Package Details</h2>
 
             <div className="space-y-4">
               <div>
                 <h3 className="text-xl font-semibold text-purple-600">{pkg.name}</h3>
-                <span className="text-sm text-gray-500 capitalize">{pkg.category} Plan</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400 capitalize">{pkg.category} Plan</span>
               </div>
 
-              <p className="text-gray-600">{pkg.description}</p>
+              <p className="text-gray-600 dark:text-gray-300">{pkg.description}</p>
 
-              <div className="border-t pt-4">
-                <h4 className="font-semibold text-gray-900 mb-3">Features:</h4>
+              <div className="border-t dark:border-gray-700 pt-4">
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Features:</h4>
                 <ul className="space-y-2">
                   {pkg.features.map((feature, index) => (
                     <li key={index} className="flex items-start">
@@ -160,20 +160,20 @@ export default function PaymentPage() {
                           d="M5 13l4 4L19 7"
                         />
                       </svg>
-                      <span className="text-gray-700">{feature}</span>
+                      <span className="text-gray-700 dark:text-gray-300">{feature}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="border-t pt-4">
-                <div className="flex justify-between text-gray-600 mb-2">
+              <div className="border-t dark:border-gray-700 pt-4">
+                <div className="flex justify-between text-gray-600 dark:text-gray-300 mb-2">
                   <span>Duration:</span>
                   <span className="font-semibold">
                     {pkg.durationMonths} month{pkg.durationMonths > 1 ? 's' : ''}
                   </span>
                 </div>
-                <div className="flex justify-between text-gray-600 mb-2">
+                <div className="flex justify-between text-gray-600 dark:text-gray-300 mb-2">
                   <span>Original Price:</span>
                   <span className={pkg.discount && pkg.discount > 0 ? 'line-through' : 'font-semibold'}>
                     LKR {pkg.price.toFixed(2)}
@@ -199,12 +199,12 @@ export default function PaymentPage() {
 
           {/* Payment Information */}
           <div className="glass-card-solid rounded-2xl shadow-2xl p-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Payment Information</h2>
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Payment Information</h2>
 
             <div className="space-y-6">
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h3 className="font-semibold text-blue-900 mb-2">Your Details</h3>
-                <div className="space-y-1 text-sm text-blue-800">
+              <div className="bg-blue-50 dark:bg-gray-800 border border-blue-200 dark:border-gray-700 rounded-lg p-4">
+                <h3 className="font-semibold text-blue-900 dark:text-gray-200 mb-2">Your Details</h3>
+                <div className="space-y-1 text-sm text-blue-800 dark:text-gray-300">
                   <p>
                     <span className="font-medium">Name:</span> {user?.name}
                   </p>
@@ -219,26 +219,26 @@ export default function PaymentPage() {
                 </div>
               </div>
 
-              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                <h3 className="font-semibold text-purple-900 mb-2">Payment Method</h3>
+              <div className="bg-purple-50 dark:bg-gray-800 border border-purple-200 dark:border-gray-700 rounded-lg p-4">
+                <h3 className="font-semibold text-purple-900 dark:text-gray-200 mb-2">Payment Method</h3>
                 <div className="flex items-center gap-3">
                   <img
                     src="/payhere-logo.png"
                     alt="PayHere"
                     className="h-8"
                   />
-                  <span className="text-sm text-purple-800">
+                  <span className="text-sm text-purple-800 dark:text-gray-300">
                     Secure payment gateway
                   </span>
                 </div>
-                <p className="text-xs text-purple-600 mt-2">
+                <p className="text-xs text-purple-600 dark:text-gray-400 mt-2">
                   Supports Visa, Mastercard, and other payment methods
                 </p>
               </div>
 
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <h3 className="font-semibold text-yellow-900 mb-2">What Happens Next?</h3>
-                <ul className="text-sm text-yellow-800 space-y-1">
+              <div className="bg-yellow-50 dark:bg-gray-800 border border-yellow-200 dark:border-gray-700 rounded-lg p-4">
+                <h3 className="font-semibold text-yellow-900 dark:text-gray-200 mb-2">What Happens Next?</h3>
+                <ul className="text-sm text-yellow-800 dark:text-gray-300 space-y-1">
                   <li>• You'll be redirected to PayHere payment page</li>
                   <li>• Complete your payment securely</li>
                   <li>• Your membership will be activated instantly</li>
@@ -288,13 +288,13 @@ export default function PaymentPage() {
                 <button
                   onClick={() => router.push('/packages')}
                   disabled={isProcessing}
-                  className="w-full py-3 rounded-lg font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition"
+                  className="w-full py-3 rounded-lg font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
                 >
                   Back to Packages
                 </button>
               </div>
 
-              <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
+              <div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                 <svg
                   className="w-4 h-4"
                   fill="none"

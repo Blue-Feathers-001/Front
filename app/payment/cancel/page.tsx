@@ -8,7 +8,7 @@ export default function PaymentCancelPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50 flex items-center justify-center px-4">
-      <div className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl p-8 md:p-12 text-center">
+      <div className="max-w-2xl w-full bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 md:p-12 text-center">
         {/* Cancel Icon */}
         <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <svg
@@ -27,17 +27,17 @@ export default function PaymentCancelPage() {
         </div>
 
         {/* Cancel Message */}
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
           Payment Cancelled
         </h1>
-        <p className="text-xl text-gray-600 mb-8">
+        <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
           Your payment was not completed
         </p>
 
         {/* Information */}
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-8 text-left">
-          <h2 className="font-bold text-yellow-900 mb-4 text-center">What Happened?</h2>
-          <ul className="space-y-3 text-yellow-800 text-sm">
+        <div className="bg-yellow-50 dark:bg-gray-700 border border-yellow-200 dark:border-gray-600 rounded-lg p-6 mb-8 text-left">
+          <h2 className="font-bold text-yellow-900 dark:text-gray-200 mb-4 text-center">What Happened?</h2>
+          <ul className="space-y-3 text-yellow-800 dark:text-gray-300 text-sm">
             <li className="flex items-start">
               <svg
                 className="w-5 h-5 text-yellow-600 mr-3 mt-0.5 flex-shrink-0"
@@ -90,9 +90,9 @@ export default function PaymentCancelPage() {
         </div>
 
         {/* Next Steps */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 text-left">
-          <h2 className="font-bold text-blue-900 mb-3 text-center">Try Again?</h2>
-          <p className="text-blue-800 text-sm text-center">
+        <div className="bg-blue-50 dark:bg-gray-700 border border-blue-200 dark:border-gray-600 rounded-lg p-6 mb-8 text-left">
+          <h2 className="font-bold text-blue-900 dark:text-gray-200 mb-3 text-center">Try Again?</h2>
+          <p className="text-blue-800 dark:text-gray-300 text-sm text-center">
             You can return to the packages page and complete your purchase whenever you're ready.
             Your membership is waiting for you!
           </p>
@@ -108,14 +108,14 @@ export default function PaymentCancelPage() {
           </Link>
           <Link
             href="/dashboard"
-            className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-300 transition"
+            className="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 py-3 px-6 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition"
           >
             Go to Dashboard
           </Link>
         </div>
 
         {/* Footer Note */}
-        <p className="text-sm text-gray-500 mt-8">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-8">
           Having trouble with payment? Contact us at{' '}
           <a href="mailto:support@bluefeathersgym.com" className="text-purple-600 hover:underline">
             support@bluefeathersgym.com

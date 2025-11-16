@@ -76,17 +76,17 @@ export default function ResetPasswordPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-2">
+              <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
                 Reset Your Password
               </h2>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-300">
                 Enter the OTP sent to your email and your new password.
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">
+                <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-2">
                   Email Address
                 </label>
                 <input
@@ -94,7 +94,7 @@ export default function ResetPasswordPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   placeholder="your@email.com"
                 />
               </div>
@@ -109,14 +109,14 @@ export default function ResetPasswordPage() {
                   onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                   required
                   maxLength={6}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all text-center text-2xl font-mono tracking-widest"
+                  className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all text-center text-2xl font-mono tracking-widest"
                   placeholder="000000"
                 />
-                <p className="text-sm text-gray-500 mt-2">Enter the 6-digit code from your email</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Enter the 6-digit code from your email</p>
               </div>
 
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">
+                <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-2">
                   New Password
                 </label>
                 <input
@@ -125,13 +125,13 @@ export default function ResetPasswordPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   placeholder="••••••••"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">
+                <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-2">
                   Confirm Password
                 </label>
                 <input
@@ -140,13 +140,13 @@ export default function ResetPasswordPage() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   placeholder="••••••••"
                 />
               </div>
 
               {password && confirmPassword && password !== confirmPassword && (
-                <p className="text-red-500 text-sm font-semibold">Passwords do not match</p>
+                <p className="text-red-500 dark:text-red-400 text-sm font-semibold">Passwords do not match</p>
               )}
 
               <button
@@ -184,13 +184,13 @@ export default function ResetPasswordPage() {
                 </svg>
               </div>
             </div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-3">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-3">
               Password Reset Successful!
             </h2>
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
               Your password has been successfully reset.
             </p>
-            <p className="text-sm text-gray-500 mb-6">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
               Redirecting to dashboard...
             </p>
           </div>

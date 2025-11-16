@@ -49,17 +49,17 @@ export default function ForgotPasswordPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                 </svg>
               </div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-2">
+              <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
                 Forgot Password?
               </h2>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-300">
                 Enter your email address and we'll send you a 6-digit OTP code to reset your password.
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">
+                <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-2">
                   Email Address
                 </label>
                 <input
@@ -67,7 +67,7 @@ export default function ForgotPasswordPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
                   placeholder="your@email.com"
                 />
               </div>
@@ -107,14 +107,14 @@ export default function ForgotPasswordPage() {
                 </svg>
               </div>
             </div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-3">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-3">
               OTP Sent!
             </h2>
-            <p className="text-gray-600 mb-4">
-              We've sent a 6-digit OTP code to <strong className="text-gray-800">{email}</strong>.
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
+              We've sent a 6-digit OTP code to <strong className="text-gray-800 dark:text-white">{email}</strong>.
               Please check your inbox.
             </p>
-            <p className="text-sm text-gray-500 mb-8">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-8">
               The OTP will expire in 1 hour for security reasons.
             </p>
             <div className="space-y-3">

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useAuth } from '@/lib/authContext';
 import { useSocket } from '@/lib/socketContext';
+import { useTheme } from '@/lib/themeContext';
 import { useState, useEffect, useRef } from 'react';
 import { notificationAPI } from '@/lib/api';
 import type { Notification } from '@/types';
@@ -11,6 +12,7 @@ import toast from 'react-hot-toast';
 export default function Navbar() {
   const { user, logout, isAuthenticated, isAdmin } = useAuth();
   const { unreadCount: socketUnreadCount, notifications: socketNotifications, connected } = useSocket();
+  const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
@@ -219,6 +221,21 @@ export default function Navbar() {
                     >
                       Send Notifications
                     </Link>
+                    <button
+                      onClick={toggleTheme}
+                      className="text-white hover:text-primary-200 transition-colors p-2 rounded-lg hover:bg-white/10"
+                      title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                    >
+                      {theme === 'dark' ? (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                      )}
+                    </button>
                   </>
                 ) : (
                   <>
@@ -234,6 +251,21 @@ export default function Navbar() {
                     >
                       Profile
                     </Link>
+                    <button
+                      onClick={toggleTheme}
+                      className="text-white hover:text-primary-200 transition-colors p-2 rounded-lg hover:bg-white/10"
+                      title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                    >
+                      {theme === 'dark' ? (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                      )}
+                    </button>
                     <div className="relative" ref={dropdownRef}>
                       <button
                         onClick={handleNotificationIconClick}
@@ -424,6 +456,26 @@ export default function Navbar() {
                     >
                       Send Notifications
                     </Link>
+                    <button
+                      onClick={toggleTheme}
+                      className="flex items-center gap-2 w-full text-left py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      {theme === 'dark' ? (
+                        <>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                          </svg>
+                          Light Mode
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                          </svg>
+                          Dark Mode
+                        </>
+                      )}
+                    </button>
                   </>
                 ) : (
                   <>
@@ -458,6 +510,26 @@ export default function Navbar() {
                         </span>
                       )}
                     </Link>
+                    <button
+                      onClick={toggleTheme}
+                      className="flex items-center gap-2 w-full text-left py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      {theme === 'dark' ? (
+                        <>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                          </svg>
+                          Light Mode
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                          </svg>
+                          Dark Mode
+                        </>
+                      )}
+                    </button>
                   </>
                 )}
                 <button

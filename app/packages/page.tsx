@@ -127,9 +127,9 @@ export default function PackagesPage() {
               <div className="p-6 bg-gray-50 dark:bg-gray-700">
                 <div className="flex items-baseline gap-2 mb-2">
                   <span className="text-4xl font-bold text-gray-900 dark:text-white">
-                    LKR {pkg.discount > 0 ? (pkg.discountedPrice || (pkg.price - (pkg.price * pkg.discount) / 100)).toFixed(2) : pkg.price.toFixed(2)}
+                    LKR {(pkg.discount ?? 0) > 0 ? (pkg.discountedPrice || (pkg.price - (pkg.price * (pkg.discount ?? 0)) / 100)).toFixed(2) : pkg.price.toFixed(2)}
                   </span>
-                  {pkg.discount > 0 && (
+                  {(pkg.discount ?? 0) > 0 && (
                     <span className="text-xl text-gray-400 dark:text-gray-500 line-through">
                       LKR {pkg.price.toFixed(2)}
                     </span>
@@ -138,7 +138,7 @@ export default function PackagesPage() {
                 <p className="text-gray-600 dark:text-gray-300">
                   for {pkg.durationMonths} month{pkg.durationMonths > 1 ? 's' : ''}
                 </p>
-                {pkg.discount > 0 && (
+                {(pkg.discount ?? 0) > 0 && (
                   <div className="mt-2 inline-block bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm font-semibold">
                     Save {pkg.discount}%
                   </div>

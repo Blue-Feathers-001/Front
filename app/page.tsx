@@ -94,10 +94,10 @@ export default function Home() {
             Select the perfect plan that fits your fitness journey
           </p>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white/90 backdrop-blur-lg p-8 rounded-xl border-2 border-white/60 hover:border-primary-400 transition-all duration-300 hover:scale-105 shadow-2xl">
-              <h4 className="text-2xl font-bold text-gray-800 mb-2">Basic</h4>
-              <p className="text-4xl font-bold text-primary-600 mb-6">$29<span className="text-lg text-gray-600">/mo</span></p>
-              <ul className="text-gray-700 space-y-3">
+            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg p-8 rounded-xl border-2 border-white/60 dark:border-gray-600 hover:border-primary-400 transition-all duration-300 hover:scale-105 shadow-2xl">
+              <h4 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Basic - 1 Month</h4>
+              <p className="text-4xl font-bold text-primary-600 mb-6">LKR 1,500</p>
+              <ul className="text-gray-700 dark:text-gray-300 space-y-3">
                 <li className="flex items-center">
                   <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -116,6 +116,12 @@ export default function Home() {
                   </svg>
                   Locker facilities
                 </li>
+                <li className="flex items-center">
+                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  Free fitness assessment
+                </li>
               </ul>
             </div>
 
@@ -123,8 +129,14 @@ export default function Home() {
               <div className="absolute top-0 right-0 bg-white/20 text-white px-4 py-1 text-sm font-bold rounded-bl-lg backdrop-blur-sm">
                 Popular
               </div>
-              <h4 className="text-2xl font-bold text-white mb-2 mt-6">Premium</h4>
-              <p className="text-4xl font-bold text-white mb-6">$59<span className="text-lg text-white/90">/mo</span></p>
+              <h4 className="text-2xl font-bold text-white mb-2 mt-6">Premium - 6 Months</h4>
+              <div className="mb-6">
+                <p className="text-4xl font-bold text-white">LKR 8,000</p>
+                <p className="text-sm text-white/80 line-through">LKR 9,000</p>
+                <span className="inline-block mt-2 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                  Save 11%
+                </span>
+              </div>
               <ul className="text-white space-y-3">
                 <li className="flex items-center">
                   <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
@@ -150,13 +162,25 @@ export default function Home() {
                   </svg>
                   Nutrition consultation
                 </li>
+                <li className="flex items-center">
+                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  Priority class booking
+                </li>
               </ul>
             </div>
 
-            <div className="bg-white/90 backdrop-blur-lg p-8 rounded-xl border-2 border-white/60 hover:border-purple-400 transition-all duration-300 hover:scale-105 shadow-2xl">
-              <h4 className="text-2xl font-bold text-gray-800 mb-2">VIP</h4>
-              <p className="text-4xl font-bold text-purple-600 mb-6">$99<span className="text-lg text-gray-600">/mo</span></p>
-              <ul className="text-gray-700 space-y-3">
+            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg p-8 rounded-xl border-2 border-white/60 dark:border-gray-600 hover:border-purple-400 transition-all duration-300 hover:scale-105 shadow-2xl">
+              <h4 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">VIP - 1 Year</h4>
+              <div className="mb-6">
+                <p className="text-4xl font-bold text-purple-600 dark:text-purple-400">LKR 15,000</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 line-through">LKR 18,000</p>
+                <span className="inline-block mt-2 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                  Save 17%
+                </span>
+              </div>
+              <ul className="text-gray-700 dark:text-gray-300 space-y-3">
                 <li className="flex items-center">
                   <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -185,10 +209,27 @@ export default function Home() {
                   <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  Guest passes
+                  Guest passes (2/month)
+                </li>
+                <li className="flex items-center">
+                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  Nutrition & diet planning
                 </li>
               </ul>
             </div>
+          </div>
+          <div className="mt-10 text-center">
+            <Link
+              href="/packages"
+              className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-semibold text-lg transition-colors"
+            >
+              View All Packages
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Link>
           </div>
         </div>
       </div>

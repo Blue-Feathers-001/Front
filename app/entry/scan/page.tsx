@@ -285,6 +285,67 @@ export default function EntryScanPage() {
             {/* QR Scanner */}
             <div id="qr-reader" className="mx-auto max-w-md rounded-lg overflow-hidden"></div>
 
+            {/* Custom styling for QR scanner */}
+            <style jsx global>{`
+              #qr-reader {
+                border: none !important;
+              }
+              #qr-reader__dashboard_section {
+                background: transparent !important;
+              }
+              #qr-reader__dashboard_section_csr,
+              #qr-reader__dashboard_section_swaplink {
+                color: rgb(55 65 81) !important;
+                font-weight: 600 !important;
+              }
+              .dark #qr-reader__dashboard_section_csr,
+              .dark #qr-reader__dashboard_section_swaplink {
+                color: rgb(243 244 246) !important;
+              }
+              #qr-reader__dashboard_section_csr button,
+              #qr-reader__camera_selection select {
+                background: white !important;
+                color: rgb(17 24 39) !important;
+                border: 2px solid rgb(209 213 219) !important;
+                padding: 8px 16px !important;
+                border-radius: 8px !important;
+                font-weight: 600 !important;
+                cursor: pointer !important;
+              }
+              .dark #qr-reader__dashboard_section_csr button,
+              .dark #qr-reader__camera_selection select {
+                background: rgb(31 41 55) !important;
+                color: rgb(243 244 246) !important;
+                border: 2px solid rgb(75 85 99) !important;
+              }
+              #qr-reader__dashboard_section_csr button:hover,
+              #qr-reader__camera_selection select:hover {
+                background: rgb(243 244 246) !important;
+                border-color: rgb(147 51 234) !important;
+              }
+              .dark #qr-reader__dashboard_section_csr button:hover,
+              .dark #qr-reader__camera_selection select:hover {
+                background: rgb(55 65 81) !important;
+                border-color: rgb(168 85 247) !important;
+              }
+              #qr-reader__scan_region {
+                border: 3px solid rgb(147 51 234) !important;
+                border-radius: 12px !important;
+              }
+              #qr-reader__camera_permission_button {
+                background: linear-gradient(to right, rgb(147 51 234), rgb(79 70 229)) !important;
+                color: white !important;
+                border: none !important;
+                padding: 12px 24px !important;
+                border-radius: 8px !important;
+                font-weight: 600 !important;
+                cursor: pointer !important;
+              }
+              #qr-reader img[alt="Info icon"] {
+                filter: brightness(0) invert(1);
+              }
+            `}</style>
+
             <div className="mt-6 text-center">
               <div className="inline-flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

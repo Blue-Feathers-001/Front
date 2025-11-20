@@ -293,6 +293,10 @@ export default function EntryScanPage() {
               #qr-reader__dashboard_section {
                 background: transparent !important;
               }
+              /* Hide camera selection dropdown */
+              #qr-reader__camera_selection {
+                display: none !important;
+              }
               #qr-reader__dashboard_section_csr,
               #qr-reader__dashboard_section_swaplink {
                 color: rgb(55 65 81) !important;
@@ -302,8 +306,7 @@ export default function EntryScanPage() {
               .dark #qr-reader__dashboard_section_swaplink {
                 color: rgb(243 244 246) !important;
               }
-              #qr-reader__dashboard_section_csr button,
-              #qr-reader__camera_selection select {
+              #qr-reader__dashboard_section_csr button {
                 background: white !important;
                 color: rgb(17 24 39) !important;
                 border: 2px solid rgb(209 213 219) !important;
@@ -312,19 +315,16 @@ export default function EntryScanPage() {
                 font-weight: 600 !important;
                 cursor: pointer !important;
               }
-              .dark #qr-reader__dashboard_section_csr button,
-              .dark #qr-reader__camera_selection select {
+              .dark #qr-reader__dashboard_section_csr button {
                 background: rgb(31 41 55) !important;
                 color: rgb(243 244 246) !important;
                 border: 2px solid rgb(75 85 99) !important;
               }
-              #qr-reader__dashboard_section_csr button:hover,
-              #qr-reader__camera_selection select:hover {
+              #qr-reader__dashboard_section_csr button:hover {
                 background: rgb(243 244 246) !important;
                 border-color: rgb(147 51 234) !important;
               }
-              .dark #qr-reader__dashboard_section_csr button:hover,
-              .dark #qr-reader__camera_selection select:hover {
+              .dark #qr-reader__dashboard_section_csr button:hover {
                 background: rgb(55 65 81) !important;
                 border-color: rgb(168 85 247) !important;
               }

@@ -40,6 +40,13 @@ export default function ProfilePage() {
     }
   }, [loading, isAuthenticated, router]);
 
+  // Refresh user data on mount to get latest membership status
+  useEffect(() => {
+    if (isAuthenticated) {
+      refreshUser();
+    }
+  }, [isAuthenticated, refreshUser]);
+
   useEffect(() => {
     if (user) {
       setName(user.name || '');

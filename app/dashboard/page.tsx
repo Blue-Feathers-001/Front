@@ -14,7 +14,7 @@ interface Announcement {
 }
 
 export default function DashboardPage() {
-  const { user, loading, isAuthenticated } = useAuth();
+  const { user, loading, isAuthenticated, refreshUser } = useAuth();
   const router = useRouter();
   const [daysRemaining, setDaysRemaining] = useState<number | null>(null);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -25,6 +25,13 @@ export default function DashboardPage() {
       router.push('/login');
     }
   }, [loading, isAuthenticated, router]);
+
+  // Refresh user data on mount to get latest membership status
+  useEffect(() => {
+    if (isAuthenticated) {
+      refreshUser();
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (user && user.membershipEndDate) {

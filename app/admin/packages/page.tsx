@@ -242,16 +242,16 @@ export default function AdminPackagesPage() {
               <div className="mb-4">
                 <div className="flex items-baseline gap-2">
                   <span className="text-3xl font-bold text-purple-600">
-                    LKR {pkg.discount > 0 ? pkg.discountedPrice : pkg.price}
+                    LKR {(pkg.discount ?? 0) > 0 ? pkg.discountedPrice : pkg.price}
                   </span>
-                  {pkg.discount > 0 && (
+                  {(pkg.discount ?? 0) > 0 && (
                     <span className="text-lg text-gray-400 line-through">
                       LKR {pkg.price}
                     </span>
                   )}
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">{pkg.durationMonths} month(s)</p>
-                {pkg.discount > 0 && (
+                {(pkg.discount ?? 0) > 0 && (
                   <span className="text-sm text-green-600 font-semibold">
                     {pkg.discount}% off
                   </span>

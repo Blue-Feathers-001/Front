@@ -83,6 +83,11 @@ export const paymentAPI = {
     return data;
   },
 
+  manualComplete: async (orderId: string) => {
+    const { data } = await api.post<ApiResponse<any>>(`/payments/manual-complete/${orderId}`);
+    return data;
+  },
+
   getAll: async (params?: { status?: string; page?: number; limit?: number }) => {
     const { data } = await api.get<ApiResponse<Payment[]>>('/payments', { params });
     return data;

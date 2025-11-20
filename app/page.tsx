@@ -1,6 +1,67 @@
+'use client';
+
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { packageAPI } from '@/lib/api';
+import type { MembershipPackage } from '@/types';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
+  const [packages, setPackages] = useState<MembershipPackage[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPackages();
+  }, []);
+
+  const fetchPackages = async () => {
+    try {
+      const response = await packageAPI.getAll({ active: true });
+      if (response.success && response.data) {
+        // Get top 3 packages
+        setPackages(response.data.slice(0, 3));
+      }
+    } catch (error) {
+      console.error('Failed to load packages:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getCategoryColor = (category: string) => {
+    const colors = {
+      basic: 'text-primary-600',
+      premium: 'text-primary-600',
+      vip: 'text-purple-600 dark:text-purple-400',
+      custom: 'text-primary-600',
+    };
+    return colors[category as keyof typeof colors] || colors.custom;
+  };
+
+  const getBorderColor = (category: string) => {
+    const colors = {
+      basic: 'border-white/60 dark:border-gray-600 hover:border-primary-400',
+      premium: 'border-primary-500',
+      vip: 'border-white/60 dark:border-gray-600 hover:border-purple-400',
+      custom: 'border-white/60 dark:border-gray-600',
+    };
+    return colors[category as keyof typeof colors] || colors.custom;
+  };
+
+  const getCardBg = (category: string) => {
+    if (category === 'premium') {
+      return 'bg-gradient-to-br from-primary-600 to-primary-700';
+    }
+    return 'bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg';
+  };
+
+  const getTextColor = (category: string) => {
+    if (category === 'premium') {
+      return 'text-white';
+    }
+    return 'text-gray-700 dark:text-gray-300';
+  };
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-4 py-16">
@@ -93,144 +154,74 @@ export default function Home() {
           <p className="text-center text-gray-600 dark:text-gray-300 mb-12 max-w-2xl mx-auto">
             Select the perfect plan that fits your fitness journey
           </p>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg p-8 rounded-xl border-2 border-white/60 dark:border-gray-600 hover:border-primary-400 transition-all duration-300 hover:scale-105 shadow-2xl">
-              <h4 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Basic - 1 Month</h4>
-              <p className="text-4xl font-bold text-primary-600 mb-6">LKR 1,500</p>
-              <ul className="text-gray-700 dark:text-gray-300 space-y-3">
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  Gym access during off-peak hours
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  Basic equipment usage
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  Locker facilities
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  Free fitness assessment
-                </li>
-              </ul>
-            </div>
 
-            <div className="bg-gradient-to-br from-primary-600 to-primary-700 p-8 rounded-xl border-2 border-primary-500 transition-all duration-300 transform scale-105 shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 bg-white/20 text-white px-4 py-1 text-sm font-bold rounded-bl-lg backdrop-blur-sm">
-                Popular
-              </div>
-              <h4 className="text-2xl font-bold text-white mb-2 mt-6">Premium - 6 Months</h4>
-              <div className="mb-6">
-                <p className="text-4xl font-bold text-white">LKR 8,000</p>
-                <p className="text-sm text-white/80 line-through">LKR 9,000</p>
-                <span className="inline-block mt-2 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  Save 11%
-                </span>
-              </div>
-              <ul className="text-white space-y-3">
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  24/7 gym access
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  All equipment & classes
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  Personal trainer session/month
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  Nutrition consultation
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  Priority class booking
-                </li>
-              </ul>
-            </div>
-
-            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg p-8 rounded-xl border-2 border-white/60 dark:border-gray-600 hover:border-purple-400 transition-all duration-300 hover:scale-105 shadow-2xl">
-              <h4 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">VIP - 1 Year</h4>
-              <div className="mb-6">
-                <p className="text-4xl font-bold text-purple-600 dark:text-purple-400">LKR 15,000</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 line-through">LKR 18,000</p>
-                <span className="inline-block mt-2 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  Save 17%
-                </span>
-              </div>
-              <ul className="text-gray-700 dark:text-gray-300 space-y-3">
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  All Premium features
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  Unlimited personal training
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  Spa & sauna access
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  Priority booking
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  Guest passes (2/month)
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  Nutrition & diet planning
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-10 text-center">
-            <Link
-              href="/packages"
-              className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-semibold text-lg transition-colors"
-            >
-              View All Packages
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          {isLoading ? (
+            <div className="flex justify-center items-center py-16">
+              <svg className="animate-spin h-12 w-12 text-primary-600" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-            </Link>
-          </div>
+            </div>
+          ) : (
+            <>
+              <div className="grid md:grid-cols-3 gap-8">
+                {packages.map((pkg, index) => (
+                  <div
+                    key={pkg._id}
+                    className={`${getCardBg(pkg.category)} p-8 rounded-xl border-2 ${getBorderColor(pkg.category)} transition-all duration-300 ${index === 1 ? 'transform scale-105' : 'hover:scale-105'} shadow-2xl relative overflow-hidden`}
+                  >
+                    {index === 1 && (
+                      <div className="absolute top-0 right-0 bg-white/20 text-white px-4 py-1 text-sm font-bold rounded-bl-lg backdrop-blur-sm">
+                        Popular
+                      </div>
+                    )}
+                    <h4 className={`text-2xl font-bold ${pkg.category === 'premium' ? 'text-white' : 'text-gray-800 dark:text-white'} mb-2 ${index === 1 ? 'mt-6' : ''}`}>
+                      <span className="uppercase">{pkg.category}</span> - {pkg.name}
+                    </h4>
+                    <div className="mb-6">
+                      <p className={`text-4xl font-bold ${getCategoryColor(pkg.category)} ${pkg.category === 'premium' ? '!text-white' : ''}`}>
+                        LKR {pkg.discount > 0 ? (pkg.discountedPrice || (pkg.price - (pkg.price * pkg.discount) / 100)).toFixed(0) : pkg.price.toFixed(0)}
+                      </p>
+                      {pkg.discount > 0 && (
+                        <>
+                          <p className={`text-sm ${pkg.category === 'premium' ? 'text-white/80' : 'text-gray-500 dark:text-gray-400'} line-through`}>
+                            LKR {pkg.price.toFixed(0)}
+                          </p>
+                          <span className="inline-block mt-2 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                            Save {pkg.discount}%
+                          </span>
+                        </>
+                      )}
+                      <p className={`text-sm ${pkg.category === 'premium' ? 'text-white/80' : 'text-gray-500 dark:text-gray-400'} mt-2`}>
+                        for {pkg.durationMonths} month{pkg.durationMonths > 1 ? 's' : ''}
+                      </p>
+                    </div>
+                    <ul className={`${getTextColor(pkg.category)} ${pkg.category === 'premium' ? '!text-white' : ''} space-y-3`}>
+                      {pkg.features.slice(0, 6).map((feature, idx) => (
+                        <li key={idx} className="flex items-center">
+                          <svg className="w-5 h-5 mr-2 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-10 text-center">
+                <Link
+                  href="/packages"
+                  className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-semibold text-lg transition-colors"
+                >
+                  View All Packages
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

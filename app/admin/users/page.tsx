@@ -598,15 +598,72 @@ export default function AdminUsersPage() {
                           Edit
                         </button>
                         <button
-                          onClick={() => {
-                            const API_URL = process.env.NEXT_PUBLIC_API_URL;
-                            const token = localStorage.getItem('token');
-                            window.open(`${API_URL}/users/${user._id}/membership-card?token=${token}`, '_blank');
+                          onClick={async () => {
+                            try {
+                              const API_URL = process.env.NEXT_PUBLIC_API_URL;
+                              const token = localStorage.getItem('token');
+                              const response = await fetch(`${API_URL}/users/${user._id}/membership-card`, {
+                                headers: {
+                                  'Authorization': `Bearer ${token}`
+                                }
+                              });
+
+                              if (response.ok) {
+                                const blob = await response.blob();
+                                const url = window.URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = `${user.name.replace(/\s+/g, '_')}_membership_card.pdf`;
+                                document.body.appendChild(a);
+                                a.click();
+                                window.URL.revokeObjectURL(url);
+                                document.body.removeChild(a);
+                              } else {
+                                toast.error('Failed to download membership card');
+                              }
+                            } catch (error) {
+                              console.error('Download error:', error);
+                              toast.error('Error downloading card');
+                            }
                           }}
                           className="bg-green-600 hover:bg-green-700 text-white px-2.5 py-1.5 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md text-xs whitespace-nowrap"
-                          title="Download Membership Card"
+                          title="Download PDF Card"
                         >
-                          🎫 Card
+                          📄 PDF
+                        </button>
+                        <button
+                          onClick={async () => {
+                            try {
+                              const API_URL = process.env.NEXT_PUBLIC_API_URL;
+                              const token = localStorage.getItem('token');
+                              const response = await fetch(`${API_URL}/users/${user._id}/membership-card-png`, {
+                                headers: {
+                                  'Authorization': `Bearer ${token}`
+                                }
+                              });
+
+                              if (response.ok) {
+                                const blob = await response.blob();
+                                const url = window.URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = `${user.name.replace(/\s+/g, '_')}_membership_card.png`;
+                                document.body.appendChild(a);
+                                a.click();
+                                window.URL.revokeObjectURL(url);
+                                document.body.removeChild(a);
+                              } else {
+                                toast.error('Failed to download membership card PNG');
+                              }
+                            } catch (error) {
+                              console.error('Download error:', error);
+                              toast.error('Error downloading PNG card');
+                            }
+                          }}
+                          className="bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1.5 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md text-xs whitespace-nowrap"
+                          title="Download PNG Card"
+                        >
+                          🖼️ PNG
                         </button>
                         <button
                           onClick={() => handleDelete(user._id)}

@@ -515,41 +515,41 @@ export default function AdminUsersPage() {
             <table className="w-full">
               <thead className="bg-gradient-to-r from-primary-600 to-primary-700 text-white">
                 <tr>
-                  <th className="px-6 py-4 text-left">
+                  <th className="px-3 py-3 text-left">
                     <input
                       type="checkbox"
                       checked={selectedUsers.length === users.length && users.length > 0}
                       onChange={handleSelectAll}
-                      className="w-5 h-5 rounded border-gray-300 dark:border-gray-600"
+                      className="w-4 h-4 rounded border-gray-300 dark:border-gray-600"
                     />
                   </th>
-                  <th className="px-6 py-4 text-left font-bold">Name</th>
-                  <th className="px-6 py-4 text-left font-bold">Email</th>
-                  <th className="px-6 py-4 text-left font-bold">Phone</th>
-                  <th className="px-6 py-4 text-left font-bold">Role</th>
-                  <th className="px-6 py-4 text-left font-bold">Status</th>
-                  <th className="px-6 py-4 text-left font-bold">Plan</th>
-                  <th className="px-6 py-4 text-left font-bold">Registered</th>
-                  <th className="px-6 py-4 text-left font-bold">Actions</th>
+                  <th className="px-3 py-3 text-left font-bold text-sm">Name</th>
+                  <th className="px-3 py-3 text-left font-bold text-sm">Email</th>
+                  <th className="px-3 py-3 text-left font-bold text-sm">Phone</th>
+                  <th className="px-3 py-3 text-left font-bold text-sm">Role</th>
+                  <th className="px-3 py-3 text-left font-bold text-sm">Status</th>
+                  <th className="px-3 py-3 text-left font-bold text-sm">Plan</th>
+                  <th className="px-3 py-3 text-left font-bold text-sm">Registered</th>
+                  <th className="px-3 py-3 text-left font-bold text-sm">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {users.map((user) => (
                   <tr key={user._id} className="hover:bg-primary-50/50 dark:hover:bg-gray-700/50 transition-colors duration-150">
-                    <td className="px-6 py-4">
+                    <td className="px-3 py-3">
                       <input
                         type="checkbox"
                         checked={selectedUsers.includes(user._id)}
                         onChange={() => handleSelectUser(user._id)}
-                        className="w-5 h-5 rounded border-gray-300 dark:border-gray-600"
+                        className="w-4 h-4 rounded border-gray-300 dark:border-gray-600"
                       />
                     </td>
-                    <td className="px-6 py-4 dark:text-gray-200">{user.name}</td>
-                    <td className="px-6 py-4 dark:text-gray-200">{user.email}</td>
-                    <td className="px-6 py-4 dark:text-gray-200">{user.phone}</td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 py-3 dark:text-gray-200 text-sm">{user.name}</td>
+                    <td className="px-3 py-3 dark:text-gray-200 text-sm">{user.email}</td>
+                    <td className="px-3 py-3 dark:text-gray-200 text-sm">{user.phone}</td>
+                    <td className="px-3 py-3">
                       <span
-                        className={`px-3 py-1.5 rounded-lg text-sm font-semibold ${
+                        className={`px-2 py-1 rounded-lg text-xs font-semibold whitespace-nowrap ${
                           user.role === 'admin'
                             ? 'bg-purple-100 text-purple-700 border border-purple-200 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-700'
                             : 'bg-gray-100 text-gray-700 border border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600'
@@ -558,9 +558,9 @@ export default function AdminUsersPage() {
                         {user.role}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 py-3">
                       <span
-                        className={`px-3 py-1.5 rounded-lg text-sm font-semibold ${
+                        className={`px-2 py-1 rounded-lg text-xs font-semibold whitespace-nowrap ${
                           user.membershipStatus === 'active'
                             ? 'bg-green-100 text-green-700 border border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-700'
                             : user.membershipStatus === 'expired'
@@ -571,10 +571,10 @@ export default function AdminUsersPage() {
                         {user.membershipStatus}
                       </span>
                     </td>
-                    <td className="px-6 py-4 capitalize dark:text-gray-200">
+                    <td className="px-3 py-3 capitalize dark:text-gray-200 text-sm">
                       {user.membershipPlan || '-'}
                     </td>
-                    <td className="px-6 py-4 text-gray-600 dark:text-gray-400 text-sm">
+                    <td className="px-3 py-3 text-gray-600 dark:text-gray-400 text-xs whitespace-nowrap">
                       {user.createdAt
                         ? new Date(user.createdAt).toLocaleDateString('en-US', {
                             year: 'numeric',
@@ -583,23 +583,23 @@ export default function AdminUsersPage() {
                           })
                         : '-'}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2">
+                    <td className="px-3 py-3">
+                      <div className="flex gap-1.5">
                         <button
                           onClick={() => router.push(`/admin/users/${user._id}`)}
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md text-sm"
+                          className="bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1.5 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md text-xs whitespace-nowrap"
                         >
                           View
                         </button>
                         <button
                           onClick={() => handleEdit(user)}
-                          className="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md text-sm"
+                          className="bg-primary-600 hover:bg-primary-700 text-white px-2.5 py-1.5 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md text-xs whitespace-nowrap"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => handleDelete(user._id)}
-                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 shadow-sm hover:shadow-md text-sm"
+                          className="bg-red-500 hover:bg-red-600 text-white px-2.5 py-1.5 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md text-xs whitespace-nowrap"
                         >
                           Delete
                         </button>
@@ -613,16 +613,16 @@ export default function AdminUsersPage() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="bg-gray-50 dark:bg-gray-800 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="text-sm text-gray-700 dark:text-gray-300">
+            <div className="bg-gray-50 dark:bg-gray-800 px-4 py-3 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="text-xs sm:text-sm text-gray-700 dark:text-gray-300">
                   Page {currentPage} of {totalPages}
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-1.5">
                   <button
                     onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
-                    className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-600 transition-all dark:text-white"
+                    className="px-3 py-1.5 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-600 transition-all dark:text-white"
                   >
                     Previous
                   </button>
@@ -633,7 +633,7 @@ export default function AdminUsersPage() {
                       <button
                         key={pageNum}
                         onClick={() => setCurrentPage(pageNum)}
-                        className={`px-4 py-2 rounded-lg transition-all ${
+                        className={`px-3 py-1.5 text-sm rounded-lg transition-all ${
                           currentPage === pageNum
                             ? 'bg-primary-600 text-white'
                             : 'bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 dark:text-white'
@@ -646,7 +646,7 @@ export default function AdminUsersPage() {
                   <button
                     onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
-                    className="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-600 transition-all dark:text-white"
+                    className="px-3 py-1.5 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-600 transition-all dark:text-white"
                   >
                     Next
                   </button>

@@ -149,14 +149,15 @@ export default function Navbar() {
 
   return (
     <nav className="bg-primary-900/90 backdrop-blur-lg border-b border-white/20 sticky top-0 z-50 shadow-lg">
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-3 lg:px-4 py-3 lg:py-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <Link href="/" className="text-xl md:text-2xl font-bold text-white hover:text-primary-200 transition-colors flex items-center gap-2">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <Link href="/" className="text-lg md:text-xl lg:text-2xl font-bold text-white hover:text-primary-200 transition-colors flex items-center gap-1.5 lg:gap-2 flex-shrink-0">
+            <svg className="w-6 h-6 lg:w-8 lg:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
-            Blue Feathers Gym
+            <span className="hidden sm:inline">Blue Feathers Gym</span>
+            <span className="sm:hidden">BF Gym</span>
           </Link>
 
           {/* Mobile menu button */}
@@ -177,63 +178,39 @@ export default function Navbar() {
           </button>
 
           {/* Desktop menu */}
-          <div className="hidden md:flex items-center gap-4 lg:gap-6">
+          <div className="hidden md:flex items-center gap-2 lg:gap-3 xl:gap-4">
             {(!isAuthenticated || !isAdmin) && (
               <Link
                 href="/packages"
-                className="text-white hover:text-primary-200 transition-colors font-medium"
+                className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
               >
                 Packages
               </Link>
             )}
             {isAuthenticated ? (
               <>
-                <span className="text-sm text-white font-semibold bg-primary-700/60 px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/20">
-                  Welcome, {user?.name}
+                <span className="text-xs lg:text-sm text-white font-semibold bg-primary-700/60 px-2 lg:px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/20 whitespace-nowrap">
+                  Welcome, {user?.name?.split(' ')[0]}
                 </span>
                 {isAdmin ? (
                   <>
                     <Link
-                      href="/admin/users"
-                      className="text-white hover:text-primary-200 transition-colors font-medium"
+                      href="/admin"
+                      className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
                     >
-                      Manage Users
-                    </Link>
-                    <Link
-                      href="/admin/packages"
-                      className="text-white hover:text-primary-200 transition-colors font-medium"
-                    >
-                      Manage Packages
-                    </Link>
-                    <Link
-                      href="/admin/revenue"
-                      className="text-white hover:text-primary-200 transition-colors font-medium"
-                    >
-                      Revenue Stats
-                    </Link>
-                    <Link
-                      href="/admin/reports/monthly"
-                      className="text-white hover:text-primary-200 transition-colors font-medium"
-                    >
-                      Reports
-                    </Link>
-                    <Link
-                      href="/admin/notifications"
-                      className="text-white hover:text-primary-200 transition-colors font-medium"
-                    >
-                      Send Notifications
+                      Admin Panel
                     </Link>
                     <button
                       onClick={toggleTheme}
-                      className="text-white hover:text-primary-200 transition-colors p-2 rounded-lg hover:bg-white/10"
+                      className="text-white hover:text-primary-200 transition-colors p-1.5 lg:p-2 rounded-lg hover:bg-white/10 flex-shrink-0"
                       title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
                     >
                       {theme === 'dark' ? (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
                       ) : (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                         </svg>
                       )}
@@ -243,27 +220,27 @@ export default function Navbar() {
                   <>
                     <Link
                       href="/dashboard"
-                      className="text-white hover:text-primary-200 transition-colors font-medium"
+                      className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
                     >
                       Dashboard
                     </Link>
                     <Link
                       href="/profile"
-                      className="text-white hover:text-primary-200 transition-colors font-medium"
+                      className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
                     >
                       Profile
                     </Link>
                     <button
                       onClick={toggleTheme}
-                      className="text-white hover:text-primary-200 transition-colors p-2 rounded-lg hover:bg-white/10"
+                      className="text-white hover:text-primary-200 transition-colors p-1.5 lg:p-2 rounded-lg hover:bg-white/10 flex-shrink-0"
                       title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
                     >
                       {theme === 'dark' ? (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
                       ) : (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                         </svg>
                       )}
@@ -271,10 +248,10 @@ export default function Navbar() {
                     <div className="relative" ref={dropdownRef}>
                       <button
                         onClick={handleNotificationIconClick}
-                        className="relative text-white hover:text-primary-200 transition-colors p-2 rounded-lg hover:bg-white/10"
+                        className="relative text-white hover:text-primary-200 transition-colors p-1.5 lg:p-2 rounded-lg hover:bg-white/10 flex-shrink-0"
                         title="Notifications"
                       >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                         </svg>
                         {unreadCount > 0 && (
@@ -382,7 +359,7 @@ export default function Navbar() {
                 )}
                 <button
                   onClick={logout}
-                  className="bg-red-500/90 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300 font-medium shadow-lg hover:shadow-xl"
+                  className="bg-red-500/90 hover:bg-red-600 text-white px-3 lg:px-4 py-1.5 lg:py-2 rounded-lg transition-all duration-300 font-medium shadow-lg hover:shadow-xl text-sm lg:text-base whitespace-nowrap"
                 >
                   Logout
                 </button>
@@ -391,13 +368,13 @@ export default function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className="text-white hover:text-primary-200 transition-colors font-medium"
+                  className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
                 >
                   Login
                 </Link>
                 <Link
                   href="/register"
-                  className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all duration-300 font-medium backdrop-blur-sm border border-white/30"
+                  className="bg-white/20 hover:bg-white/30 text-white px-3 lg:px-4 py-1.5 lg:py-2 rounded-lg transition-all duration-300 font-medium backdrop-blur-sm border border-white/30 text-sm lg:text-base whitespace-nowrap"
                 >
                   Register
                 </Link>
@@ -426,39 +403,11 @@ export default function Navbar() {
                 {isAdmin ? (
                   <>
                     <Link
-                      href="/admin/users"
+                      href="/admin"
                       onClick={() => setMobileMenuOpen(false)}
                       className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
                     >
-                      Manage Users
-                    </Link>
-                    <Link
-                      href="/admin/packages"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
-                    >
-                      Manage Packages
-                    </Link>
-                    <Link
-                      href="/admin/revenue"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
-                    >
-                      Revenue Stats
-                    </Link>
-                    <Link
-                      href="/admin/reports/monthly"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
-                    >
-                      Reports
-                    </Link>
-                    <Link
-                      href="/admin/notifications"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
-                    >
-                      Send Notifications
+                      Admin Panel
                     </Link>
                     <button
                       onClick={toggleTheme}

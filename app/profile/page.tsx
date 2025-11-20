@@ -16,6 +16,10 @@ export default function ProfilePage() {
   const [phone, setPhone] = useState('');
   const [updating, setUpdating] = useState(false);
 
+  // Profile Picture State
+  const [avatar, setAvatar] = useState('');
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
   // Notification Preferences State
   const [notificationPreferences, setNotificationPreferences] = useState({
     email: true,
@@ -41,6 +45,7 @@ export default function ProfilePage() {
       setName(user.name || '');
       setEmail(user.email || '');
       setPhone(user.phone || '');
+      setAvatar(user.avatar || '');
       setNotificationPreferences({
         email: user.notificationPreferences?.email ?? true,
         sms: user.notificationPreferences?.sms ?? false,
@@ -83,6 +88,56 @@ export default function ProfilePage() {
       toast.error(error.response?.data?.message || 'Failed to update profile');
     } finally {
       setUpdating(false);
+    }
+  };
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image size must be less than 5MB');
+      return;
+    }
+
+    setUploadingAvatar(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('avatar', file);
+
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/users/profile/picture`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success('Profile picture updated successfully');
+        setAvatar(data.avatar);
+        await refreshUser();
+      } else {
+        toast.error(data.message || 'Failed to upload image');
+      }
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      toast.error('Failed to upload image');
+    } finally {
+      setUploadingAvatar(false);
     }
   };
 
@@ -175,6 +230,57 @@ export default function ProfilePage() {
               </svg>
               Personal Information
             </h2>
+
+            {/* Profile Picture Section */}
+            <div className="mb-6 flex flex-col items-center">
+              <div className="relative">
+                <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 border-4 border-white dark:border-gray-600 shadow-lg">
+                  {avatar ? (
+                    <img
+                      src={avatar}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-400 to-primary-600">
+                      <svg className="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                <label
+                  htmlFor="avatar-upload"
+                  className="absolute bottom-0 right-0 bg-primary-600 hover:bg-primary-700 text-white p-2 rounded-full cursor-pointer shadow-lg transition-all duration-300 hover:scale-110"
+                >
+                  {uploadingAvatar ? (
+                    <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  )}
+                </label>
+                <input
+                  id="avatar-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarUpload}
+                  className="hidden"
+                  disabled={uploadingAvatar}
+                />
+              </div>
+              <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
+                Click the camera icon to upload a new profile picture
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-500">
+                Max size: 5MB • Formats: JPG, PNG, GIF
+              </p>
+            </div>
 
             <form onSubmit={handleUpdateProfile} className="space-y-4">
               <div>

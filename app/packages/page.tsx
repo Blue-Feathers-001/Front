@@ -106,7 +106,7 @@ export default function PackagesPage() {
           {filteredPackages.map((pkg) => (
             <div
               key={pkg._id}
-              className="bg-white rounded-2xl shadow-xl overflow-hidden transform transition hover:scale-105 hover:shadow-2xl"
+              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden transform transition hover:scale-105 hover:shadow-2xl"
             >
               {/* Package Header */}
               <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-6 text-white">
@@ -124,22 +124,22 @@ export default function PackagesPage() {
               </div>
 
               {/* Pricing */}
-              <div className="p-6 bg-gray-50">
+              <div className="p-6 bg-gray-50 dark:bg-gray-700">
                 <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-4xl font-bold text-gray-900">
+                  <span className="text-4xl font-bold text-gray-900 dark:text-white">
                     LKR {pkg.discount && pkg.discount > 0 ? (pkg.discountedPrice || (pkg.price - (pkg.price * pkg.discount) / 100)).toFixed(2) : pkg.price.toFixed(2)}
                   </span>
                   {pkg.discount && pkg.discount > 0 && (
-                    <span className="text-xl text-gray-400 line-through">
+                    <span className="text-xl text-gray-400 dark:text-gray-500 line-through">
                       LKR {pkg.price.toFixed(2)}
                     </span>
                   )}
                 </div>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-gray-300">
                   for {pkg.durationMonths} month{pkg.durationMonths > 1 ? 's' : ''}
                 </p>
                 {pkg.discount && pkg.discount > 0 && (
-                  <div className="mt-2 inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+                  <div className="mt-2 inline-block bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm font-semibold">
                     Save {pkg.discount}%
                   </div>
                 )}
@@ -147,7 +147,7 @@ export default function PackagesPage() {
 
               {/* Features */}
               <div className="p-6">
-                <h4 className="font-bold text-gray-900 mb-4">What's Included:</h4>
+                <h4 className="font-bold text-gray-900 dark:text-white mb-4">What's Included:</h4>
                 <ul className="space-y-3">
                   {pkg.features.map((feature, index) => (
                     <li key={index} className="flex items-start">
@@ -164,7 +164,7 @@ export default function PackagesPage() {
                           d="M5 13l4 4L19 7"
                         />
                       </svg>
-                      <span className="text-gray-700">{feature}</span>
+                      <span className="text-gray-700 dark:text-gray-300">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -173,8 +173,8 @@ export default function PackagesPage() {
               {/* Availability */}
               {pkg.maxMembers && (
                 <div className="px-6 pb-4">
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                    <p className="text-sm text-yellow-800">
+                  <div className="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-lg p-3">
+                    <p className="text-sm text-yellow-800 dark:text-yellow-200">
                       <span className="font-semibold">
                         {pkg.maxMembers - pkg.currentMembers}
                       </span>{' '}

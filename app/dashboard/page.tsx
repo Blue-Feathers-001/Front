@@ -25,7 +25,7 @@ interface PackageDetails {
 }
 
 export default function DashboardPage() {
-  const { user, loading, isAuthenticated, refreshUser } = useAuth();
+  const { user, loading, isAuthenticated, refreshUser, isAdmin } = useAuth();
   const router = useRouter();
   const [daysRemaining, setDaysRemaining] = useState<number | null>(null);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -35,8 +35,11 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       router.push('/login');
+    } else if (!loading && isAuthenticated && isAdmin) {
+      // Redirect admin to admin panel instead of dashboard
+      router.push('/admin/users');
     }
-  }, [loading, isAuthenticated, router]);
+  }, [loading, isAuthenticated, isAdmin, router]);
 
   // Refresh user data on mount to get latest membership status
   useEffect(() => {
@@ -80,10 +83,10 @@ export default function DashboardPage() {
     }
   }, [isAuthenticated]);
 
-  // Fetch package details based on user's membership package
+  // Fetch package details based on user's membership package (only for non-admin users)
   useEffect(() => {
     const fetchPackageDetails = async () => {
-      if (!user?.membershipPlan) return;
+      if (!user?.membershipPlan || isAdmin) return;
 
       try {
         const token = localStorage.getItem('token');
@@ -108,7 +111,7 @@ export default function DashboardPage() {
     };
 
     fetchPackageDetails();
-  }, [user?.membershipPlan]);
+  }, [user?.membershipPlan, isAdmin]);
 
   if (loading) {
     return (
@@ -179,63 +182,66 @@ export default function DashboardPage() {
           <p className="text-sm sm:text-base text-white/90 drop-shadow">Here's your membership overview</p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 animate-fadeInUp">
-          <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-xs sm:text-sm font-bold text-gray-700 dark:text-white">Membership Status</h3>
-              <div className="bg-gradient-to-br from-primary-500 to-primary-700 p-2 rounded-lg">
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+        {/* Only show membership cards for non-admin users */}
+        {!isAdmin && (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 animate-fadeInUp">
+            <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <h3 className="text-xs sm:text-sm font-bold text-gray-700 dark:text-white">Membership Status</h3>
+                <div className="bg-gradient-to-br from-primary-500 to-primary-700 p-2 rounded-lg">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
               </div>
+              <span
+                className={`inline-block px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-bold text-xs sm:text-sm shadow-md ${getMembershipStatusColor(
+                  user.membershipStatus
+                )}`}
+              >
+                {user.membershipStatus.toUpperCase()}
+              </span>
             </div>
-            <span
-              className={`inline-block px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-bold text-xs sm:text-sm shadow-md ${getMembershipStatusColor(
-                user.membershipStatus
-              )}`}
-            >
-              {user.membershipStatus.toUpperCase()}
-            </span>
-          </div>
 
-          <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-xs sm:text-sm font-bold text-gray-700 dark:text-white">Current Plan</h3>
-              <div className="bg-gradient-to-br from-purple-500 to-purple-700 p-2 rounded-lg">
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                </svg>
+            <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <h3 className="text-xs sm:text-sm font-bold text-gray-700 dark:text-white">Current Plan</h3>
+                <div className="bg-gradient-to-br from-purple-500 to-purple-700 p-2 rounded-lg">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                  </svg>
+                </div>
               </div>
-            </div>
-            <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white capitalize">
-              {packageDetails?.name || user.membershipPlan || 'No Plan'}
-            </p>
-            {packageDetails && (
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1 font-semibold">
-                LKR {(packageDetails.discount ?? 0) > 0 ? (packageDetails.discountedPrice || (packageDetails.price - (packageDetails.price * (packageDetails.discount ?? 0)) / 100)).toFixed(2) : packageDetails.price.toFixed(2)} / {packageDetails.durationMonths} month{packageDetails.durationMonths > 1 ? 's' : ''}
+              <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white capitalize">
+                {packageDetails?.name || user.membershipPlan || 'No Plan'}
               </p>
-            )}
-          </div>
+              {packageDetails && (
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1 font-semibold">
+                  LKR {(packageDetails.discount ?? 0) > 0 ? (packageDetails.discountedPrice || (packageDetails.price - (packageDetails.price * (packageDetails.discount ?? 0)) / 100)).toFixed(2) : packageDetails.price.toFixed(2)} / {packageDetails.durationMonths} month{packageDetails.durationMonths > 1 ? 's' : ''}
+                </p>
+              )}
+            </div>
 
-          <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-xs sm:text-sm font-bold text-gray-700 dark:text-white">Days Remaining</h3>
-              <div className="bg-gradient-to-br from-green-500 to-green-700 p-2 rounded-lg">
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
+            <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <h3 className="text-xs sm:text-sm font-bold text-gray-700 dark:text-white">Days Remaining</h3>
+                <div className="bg-gradient-to-br from-green-500 to-green-700 p-2 rounded-lg">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
               </div>
-            </div>
-            <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
-              {daysRemaining !== null ? (daysRemaining > 0 ? daysRemaining : 0) : '-'}
-            </p>
-            {user.membershipEndDate && (
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1">
-                Until {new Date(user.membershipEndDate).toLocaleDateString()}
+              <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+                {daysRemaining !== null ? (daysRemaining > 0 ? daysRemaining : 0) : '-'}
               </p>
-            )}
+              {user.membershipEndDate && (
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1">
+                  Until {new Date(user.membershipEndDate).toLocaleDateString()}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Announcements Section */}
         {!announcementsLoading && announcements.length > 0 && (
@@ -325,7 +331,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {packageDetails && (
+          {packageDetails && !isAdmin && (
             <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg">
               <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4 flex items-center">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -358,7 +364,7 @@ export default function DashboardPage() {
           <NotificationCenter maxDisplay={5} />
         </div>
 
-        {user.membershipStatus === 'inactive' && (
+        {!isAdmin && user.membershipStatus === 'inactive' && (
           <div className="mt-6 sm:mt-8 glass-card-solid border-l-4 border-yellow-500 p-4 sm:p-6 rounded-xl shadow-lg animate-fadeInUp">
             <div className="flex items-start">
               <div className="bg-yellow-500 p-2 rounded-lg mr-3">
@@ -378,7 +384,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {user.membershipStatus === 'expired' && (
+        {!isAdmin && user.membershipStatus === 'expired' && (
           <div className="mt-6 sm:mt-8 glass-card-solid border-l-4 border-red-500 p-4 sm:p-6 rounded-xl shadow-lg animate-fadeInUp">
             <div className="flex items-start">
               <div className="bg-red-500 p-2 rounded-lg mr-3">

@@ -13,12 +13,24 @@ interface Announcement {
   createdAt: string;
 }
 
+interface PackageDetails {
+  _id: string;
+  name: string;
+  price: number;
+  durationMonths: number;
+  features: string[];
+  category: string;
+  discount?: number;
+  discountedPrice?: number;
+}
+
 export default function DashboardPage() {
   const { user, loading, isAuthenticated, refreshUser } = useAuth();
   const router = useRouter();
   const [daysRemaining, setDaysRemaining] = useState<number | null>(null);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [announcementsLoading, setAnnouncementsLoading] = useState(true);
+  const [packageDetails, setPackageDetails] = useState<PackageDetails | null>(null);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -68,6 +80,36 @@ export default function DashboardPage() {
     }
   }, [isAuthenticated]);
 
+  // Fetch package details based on user's membership package
+  useEffect(() => {
+    const fetchPackageDetails = async () => {
+      if (!user?.membershipPlan) return;
+
+      try {
+        const token = localStorage.getItem('token');
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(`${apiUrl}/packages`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Find the package that matches user's membership plan category
+          const userPackage = data.data?.find(
+            (pkg: PackageDetails) => pkg.category.toLowerCase() === user.membershipPlan?.toLowerCase()
+          );
+          if (userPackage) {
+            setPackageDetails(userPackage);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching package details:', error);
+      }
+    };
+
+    fetchPackageDetails();
+  }, [user?.membershipPlan]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -114,32 +156,18 @@ export default function DashboardPage() {
     }
   };
 
-  const getPlanDetails = (plan: string) => {
-    switch (plan?.toLowerCase()) {
+  const getCategoryColor = (category: string) => {
+    switch (category?.toLowerCase()) {
       case 'basic':
-        return {
-          price: '$29/month',
-          features: ['Off-peak hours access', 'Basic equipment', 'Locker facilities'],
-          color: 'bg-blue-500'
-        };
+        return 'bg-blue-500';
       case 'premium':
-        return {
-          price: '$59/month',
-          features: ['24/7 access', 'All equipment', '1 PT session/month', 'Nutrition consultation'],
-          color: 'bg-purple-500'
-        };
+        return 'bg-purple-500';
       case 'vip':
-        return {
-          price: '$99/month',
-          features: ['All Premium features', 'Unlimited PT sessions', 'Spa access', 'Priority booking', 'Guest passes'],
-          color: 'bg-gradient-to-r from-yellow-400 to-orange-500'
-        };
+        return 'bg-gradient-to-r from-yellow-400 to-orange-500';
       default:
-        return null;
+        return 'bg-gray-500';
     }
   };
-
-  const planDetails = user.membershipPlan ? getPlanDetails(user.membershipPlan) : null;
 
   return (
     <div className="min-h-screen py-4 sm:py-8 md:py-12 px-4">
@@ -180,9 +208,13 @@ export default function DashboardPage() {
               </div>
             </div>
             <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white capitalize">
-              {user.membershipPlan || 'No Plan'}
+              {packageDetails?.name || user.membershipPlan || 'No Plan'}
             </p>
-            {planDetails && <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1 font-semibold">{planDetails.price}</p>}
+            {packageDetails && (
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1 font-semibold">
+                LKR {(packageDetails.discount ?? 0) > 0 ? (packageDetails.discountedPrice || (packageDetails.price - (packageDetails.price * (packageDetails.discount ?? 0)) / 100)).toFixed(2) : packageDetails.price.toFixed(2)} / {packageDetails.durationMonths} month{packageDetails.durationMonths > 1 ? 's' : ''}
+              </p>
+            )}
           </div>
 
           <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
@@ -293,7 +325,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {planDetails && (
+          {packageDetails && (
             <div className="glass-card-solid p-4 sm:p-6 rounded-xl shadow-lg">
               <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4 flex items-center">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -301,12 +333,14 @@ export default function DashboardPage() {
                 </svg>
                 Plan Benefits
               </h2>
-              <div className={`${planDetails.color} text-white p-3 sm:p-4 rounded-lg mb-3 sm:mb-4`}>
-                <h3 className="text-xl sm:text-2xl font-bold capitalize">{user.membershipPlan} Plan</h3>
-                <p className="text-lg sm:text-xl font-semibold mt-1">{planDetails.price}</p>
+              <div className={`${getCategoryColor(packageDetails.category)} text-white p-3 sm:p-4 rounded-lg mb-3 sm:mb-4`}>
+                <h3 className="text-xl sm:text-2xl font-bold capitalize">{packageDetails.name}</h3>
+                <p className="text-lg sm:text-xl font-semibold mt-1">
+                  LKR {(packageDetails.discount ?? 0) > 0 ? (packageDetails.discountedPrice || (packageDetails.price - (packageDetails.price * (packageDetails.discount ?? 0)) / 100)).toFixed(2) : packageDetails.price.toFixed(2)} / {packageDetails.durationMonths} month{packageDetails.durationMonths > 1 ? 's' : ''}
+                </p>
               </div>
               <ul className="space-y-2 sm:space-y-3">
-                {planDetails.features.map((feature, index) => (
+                {packageDetails.features.map((feature, index) => (
                   <li key={index} className="flex items-start">
                     <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 dark:text-green-400 mr-2 sm:mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

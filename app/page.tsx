@@ -180,9 +180,9 @@ export default function Home() {
                     </h4>
                     <div className="mb-6">
                       <p className={`text-4xl font-bold ${getCategoryColor(pkg.category)} ${pkg.category === 'premium' ? '!text-white' : ''}`}>
-                        LKR {pkg.discount > 0 ? (pkg.discountedPrice || (pkg.price - (pkg.price * pkg.discount) / 100)).toFixed(0) : pkg.price.toFixed(0)}
+                        LKR {(pkg.discount ?? 0) > 0 ? (pkg.discountedPrice || (pkg.price - (pkg.price * (pkg.discount ?? 0)) / 100)).toFixed(0) : pkg.price.toFixed(0)}
                       </p>
-                      {pkg.discount > 0 && (
+                      {(pkg.discount ?? 0) > 0 && (
                         <>
                           <p className={`text-sm ${pkg.category === 'premium' ? 'text-white/80' : 'text-gray-500 dark:text-gray-400'} line-through`}>
                             LKR {pkg.price.toFixed(0)}

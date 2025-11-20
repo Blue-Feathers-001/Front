@@ -598,6 +598,17 @@ export default function AdminUsersPage() {
                           Edit
                         </button>
                         <button
+                          onClick={() => {
+                            const API_URL = process.env.NEXT_PUBLIC_API_URL;
+                            const token = localStorage.getItem('token');
+                            window.open(`${API_URL}/users/${user._id}/membership-card?token=${token}`, '_blank');
+                          }}
+                          className="bg-green-600 hover:bg-green-700 text-white px-2.5 py-1.5 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md text-xs whitespace-nowrap"
+                          title="Download Membership Card"
+                        >
+                          🎫 Card
+                        </button>
+                        <button
                           onClick={() => handleDelete(user._id)}
                           className="bg-red-500 hover:bg-red-600 text-white px-2.5 py-1.5 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md text-xs whitespace-nowrap"
                         >

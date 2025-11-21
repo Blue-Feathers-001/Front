@@ -60,6 +60,7 @@ export default function ChatPage() {
   const [otherUserTyping, setOtherUserTyping] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
   const [pendingAttachments, setPendingAttachments] = useState<Attachment[]>([]);
+  const [showMobileSidebar, setShowMobileSidebar] = useState(true);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
@@ -223,6 +224,7 @@ export default function ChatPage() {
       if (response.data.success) {
         setSelectedChat(response.data.chat);
         setShowNewChat(false);
+        setShowMobileSidebar(false); // Hide sidebar on mobile after selecting chat
         await fetchChats();
       }
     } catch (error: any) {
@@ -352,9 +354,9 @@ export default function ChatPage() {
 
         {/* Chat Container */}
         <div className="glass-card-solid rounded-xl shadow-lg overflow-hidden">
-          <div className="grid grid-cols-1 md:grid-cols-3 h-[calc(100vh-300px)] min-h-[600px]">
+          <div className="grid grid-cols-1 md:grid-cols-3 h-[calc(100vh-200px)] md:h-[calc(100vh-300px)] min-h-[500px] md:min-h-[600px]">
             {/* Chat List Sidebar */}
-            <div className="md:col-span-1 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
+            <div className={`md:col-span-1 border-r border-gray-200 dark:border-gray-700 overflow-y-auto ${showMobileSidebar ? 'block' : 'hidden md:block'}`}>
               <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                 <button
                   onClick={() => setShowNewChat(!showNewChat)}
@@ -430,7 +432,10 @@ export default function ChatPage() {
                     return (
                       <button
                         key={chat._id}
-                        onClick={() => setSelectedChat(chat)}
+                        onClick={() => {
+                          setSelectedChat(chat);
+                          setShowMobileSidebar(false);
+                        }}
                         className={`w-full flex items-center gap-3 p-4 border-b border-gray-200 dark:border-gray-700 hover:bg-primary-50/50 dark:hover:bg-gray-700/50 transition ${
                           selectedChat?._id === chat._id ? 'bg-primary-50 dark:bg-gray-700' : ''
                         }`}
@@ -467,12 +472,24 @@ export default function ChatPage() {
             </div>
 
             {/* Chat Window */}
-            <div className="md:col-span-2 flex flex-col overflow-hidden">
+            <div className={`md:col-span-2 flex flex-col overflow-hidden ${showMobileSidebar ? 'hidden md:flex' : 'flex'}`}>
               {selectedChat ? (
                 <>
                   {/* Chat Header */}
                   <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-primary-600 to-primary-700">
                     <div className="flex items-center gap-3">
+                      {/* Mobile Back Button */}
+                      <button
+                        type="button"
+                        onClick={() => setShowMobileSidebar(true)}
+                        className="md:hidden text-white hover:bg-white/10 p-2 rounded-lg transition"
+                        title="Back to chat list"
+                        aria-label="Back to chat list"
+                      >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                      </button>
                       {(() => {
                         const otherUser = getOtherParticipant(selectedChat);
                         if (!otherUser) return null;
@@ -511,7 +528,7 @@ export default function ChatPage() {
                           key={message._id}
                           className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
                         >
-                          <div className={`max-w-[70%] ${isOwnMessage ? 'order-2' : 'order-1'}`}>
+                          <div className={`max-w-[85%] sm:max-w-[75%] md:max-w-[70%] ${isOwnMessage ? 'order-2' : 'order-1'}`}>
                             <div
                               className={`rounded-2xl px-4 py-2 ${
                                 isOwnMessage
@@ -608,8 +625,8 @@ export default function ChatPage() {
                   )}
 
                   {/* Message Input */}
-                  <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-                    <div className="flex gap-2">
+                  <form onSubmit={handleSendMessage} className="p-3 sm:p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                    <div className="flex gap-2 items-end">
                       <input
                         type="file"
                         ref={fileInputRef}
@@ -622,7 +639,9 @@ export default function ChatPage() {
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploadingFile}
-                        className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 px-3 sm:px-4 py-2 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                        title="Attach file"
+                        aria-label="Attach file"
                       >
                         {uploadingFile ? (
                           <svg className="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -649,7 +668,8 @@ export default function ChatPage() {
                         type="submit"
                         disabled={!newMessage.trim() && pendingAttachments.length === 0}
                         title="Send message"
-                        className="bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Send message"
+                        className="bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white px-4 sm:px-6 py-2 rounded-lg font-medium transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

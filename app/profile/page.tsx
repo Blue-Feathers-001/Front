@@ -52,7 +52,7 @@ export default function ProfilePage() {
       setName(user.name || '');
       setEmail(user.email || '');
       setPhone(user.phone || '');
-      setAvatar(user.avatar || '');
+      setAvatar(user.profileImage || user.avatar || '');
       setNotificationPreferences({
         email: user.notificationPreferences?.email ?? true,
         sms: user.notificationPreferences?.sms ?? false,
@@ -135,7 +135,7 @@ export default function ProfilePage() {
 
       if (data.success) {
         toast.success('Profile picture updated successfully');
-        setAvatar(data.avatar);
+        setAvatar(data.profileImage);
         await refreshUser();
       } else {
         toast.error(data.message || 'Failed to upload image');

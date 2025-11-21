@@ -7,16 +7,19 @@ import toast from 'react-hot-toast';
 import { useSession, signIn, signOut } from 'next-auth/react';
 
 interface User {
-  id: string;
+  _id?: string;
+  id?: string;
   name: string;
   email: string;
   phone?: string;
-  role: 'admin' | 'user';
+  role: 'admin' | 'user' | 'trainer';
+  isActive?: boolean;
   membershipStatus: string;
   membershipPlan?: string;
   membershipStartDate?: string;
   membershipEndDate?: string;
   avatar?: string;
+  profileImage?: string;
   authProvider?: string;
   notificationPreferences?: {
     email: boolean;
@@ -36,6 +39,7 @@ interface AuthContextType {
   refreshUser: () => Promise<void>;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  isTrainer: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -54,39 +58,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return;
     }
 
-    if (session?.user) {
-      // Handle Google OAuth user - use backend user data if available
-      const sessionData = session as any;
+    const initAuth = async () => {
+      if (session?.user) {
+        // Handle Google OAuth user - use backend user data if available
+        const sessionData = session as any;
 
-      if (sessionData.backendUser) {
-        // Backend user data is available
-        const backendUser: User = {
-          id: sessionData.backendUser.user?.id || sessionData.backendUser.id || '',
-          name: sessionData.backendUser.user?.name || sessionData.backendUser.name || '',
-          email: sessionData.backendUser.user?.email || sessionData.backendUser.email || '',
-          phone: sessionData.backendUser.user?.phone || sessionData.backendUser.phone,
-          role: sessionData.backendUser.user?.role || sessionData.backendUser.role || 'user',
-          membershipStatus: sessionData.backendUser.user?.membershipStatus || sessionData.backendUser.membershipStatus || 'inactive',
-          membershipPlan: sessionData.backendUser.user?.membershipPlan || sessionData.backendUser.membershipPlan,
-          membershipEndDate: sessionData.backendUser.user?.membershipEndDate || sessionData.backendUser.membershipEndDate,
-          avatar: sessionData.backendUser.user?.avatar || sessionData.backendUser.avatar || session.user.image || undefined,
-          authProvider: sessionData.backendUser.user?.authProvider || sessionData.backendUser.authProvider || 'google',
-        };
-        setUser(backendUser);
-        const token = sessionData.backendToken || 'google-oauth-token';
+        if (sessionData.backendUser) {
+          // Backend user data is available
+          const backendUser: User = {
+            _id: sessionData.backendUser.user?._id || sessionData.backendUser._id,
+            id: sessionData.backendUser.user?.id || sessionData.backendUser.id,
+            name: sessionData.backendUser.user?.name || sessionData.backendUser.name || '',
+            email: sessionData.backendUser.user?.email || sessionData.backendUser.email || '',
+            phone: sessionData.backendUser.user?.phone || sessionData.backendUser.phone,
+            role: sessionData.backendUser.user?.role || sessionData.backendUser.role || 'user',
+            membershipStatus: sessionData.backendUser.user?.membershipStatus || sessionData.backendUser.membershipStatus || 'inactive',
+            membershipPlan: sessionData.backendUser.user?.membershipPlan || sessionData.backendUser.membershipPlan,
+            membershipEndDate: sessionData.backendUser.user?.membershipEndDate || sessionData.backendUser.membershipEndDate,
+            profileImage: sessionData.backendUser.user?.profileImage || sessionData.backendUser.profileImage,
+            avatar: sessionData.backendUser.user?.avatar || sessionData.backendUser.avatar || session.user.image || undefined,
+            authProvider: sessionData.backendUser.user?.authProvider || sessionData.backendUser.authProvider || 'google',
+          };
+          setUser(backendUser);
+          const token = sessionData.backendToken || 'google-oauth-token';
 
-        // Store in localStorage for persistence
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(backendUser));
+          // Store in localStorage for persistence
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(backendUser));
 
-        // Set axios header
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          // Set axios header
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        }
+      } else {
+        // Check for stored auth data (traditional login)
+        await checkAuth();
       }
-    } else {
-      // Check for stored auth data (traditional login)
-      checkAuth();
-    }
-    setLoading(false);
+      setLoading(false);
+    };
+
+    initAuth();
   }, [session, status]);
 
   const checkAuth = async () => {
@@ -125,6 +135,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         router.push(redirect);
       } else if (user.role === 'admin') {
         router.push('/admin/users');
+      } else if (user.role === 'trainer') {
+        router.push('/trainer/members');
       } else {
         router.push('/dashboard');
       }
@@ -209,6 +221,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         refreshUser,
         isAuthenticated: !!user,
         isAdmin: user?.role === 'admin',
+        isTrainer: user?.role === 'trainer',
       }}
     >
       {children}

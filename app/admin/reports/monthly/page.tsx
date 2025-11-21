@@ -21,6 +21,25 @@ interface PackageDistribution {
   revenue: number;
 }
 
+interface DetailedTransaction {
+  _id: string;
+  orderId: string;
+  user: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  package: {
+    _id: string;
+    name: string;
+    price: number;
+    durationMonths: number;
+  };
+  amount: number;
+  status: string;
+  createdAt: string;
+}
+
 interface MonthlySummary {
   totalUsers: number;
   activeMembers: number;
@@ -36,8 +55,10 @@ export default function MonthlyReportsPage() {
   const [loading, setLoading] = useState(true);
   const [monthlyData, setMonthlyData] = useState<MonthlyData[]>([]);
   const [packageDistribution, setPackageDistribution] = useState<PackageDistribution[]>([]);
+  const [detailedTransactions, setDetailedTransactions] = useState<DetailedTransaction[]>([]);
   const [summary, setSummary] = useState<MonthlySummary | null>(null);
   const [monthsToShow, setMonthsToShow] = useState(12);
+  const [showTransactions, setShowTransactions] = useState(false);
 
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -56,6 +77,7 @@ export default function MonthlyReportsPage() {
       if (response.success) {
         setMonthlyData(response.data.monthlyData);
         setPackageDistribution(response.data.packageDistribution);
+        setDetailedTransactions(response.data.detailedTransactions || []);
         setSummary(response.data.summary);
       } else {
         toast.error('Failed to fetch monthly report');
@@ -108,6 +130,17 @@ export default function MonthlyReportsPage() {
       packageDistribution.forEach((pkg) => {
         const share = (pkg.revenue / totalRevenue) * 100;
         csvContent += `${pkg._id},${pkg.count},${pkg.revenue.toFixed(2)},${share.toFixed(1)}\n`;
+      });
+    }
+
+    // Add detailed transactions
+    if (detailedTransactions.length > 0) {
+      csvContent += '\n\nDetailed Transactions\n';
+      csvContent += 'Date,Member Name,Email,Package,Order ID,Amount,Duration (months)\n';
+
+      detailedTransactions.forEach((transaction) => {
+        const date = new Date(transaction.createdAt).toLocaleDateString();
+        csvContent += `${date},"${transaction.user.name}",${transaction.user.email},"${transaction.package.name}",${transaction.orderId},${transaction.amount.toFixed(2)},${transaction.package.durationMonths}\n`;
       });
     }
 
@@ -255,6 +288,48 @@ export default function MonthlyReportsPage() {
       html += `
           </tbody>
         </table>
+      `;
+    }
+
+    // Add detailed transactions
+    if (detailedTransactions.length > 0) {
+      html += `
+        <h2>Detailed Transactions (Last 100)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Member</th>
+              <th>Package</th>
+              <th>Order ID</th>
+              <th style="text-align: right;">Amount</th>
+              <th style="text-align: center;">Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      detailedTransactions.slice(0, 50).forEach((transaction) => {
+        const date = new Date(transaction.createdAt).toLocaleDateString();
+        html += `
+          <tr>
+            <td>${date}</td>
+            <td>
+              <div style="font-weight: bold;">${transaction.user.name}</div>
+              <div style="font-size: 11px; color: #666;">${transaction.user.email}</div>
+            </td>
+            <td>${transaction.package.name}</td>
+            <td style="font-family: monospace; font-size: 11px;">${transaction.orderId}</td>
+            <td style="text-align: right;">${formatCurrency(transaction.amount)}</td>
+            <td style="text-align: center;">${transaction.package.durationMonths} ${transaction.package.durationMonths === 1 ? 'month' : 'months'}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+        <p style="font-size: 11px; color: #666; margin-top: 10px;">*Showing first 50 transactions out of ${detailedTransactions.length} total</p>
       `;
     }
 
@@ -500,6 +575,90 @@ export default function MonthlyReportsPage() {
             </table>
           </div>
         </div>
+
+        {/* Detailed Transactions */}
+        {detailedTransactions.length > 0 && (
+          <div className="glass-card-solid rounded-2xl shadow-2xl overflow-hidden mb-8 animate-fadeInUp">
+            <div className="px-6 py-5 border-b border-gray-200 dark:border-gray-600 bg-gradient-to-r from-indigo-600 to-indigo-700 flex justify-between items-center">
+              <div>
+                <h2 className="text-xl font-bold text-white">Recent Transactions</h2>
+                <p className="text-white/80 text-sm mt-1">Detailed payment records (Last 100 transactions)</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowTransactions(!showTransactions)}
+                className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2"
+              >
+                {showTransactions ? 'Hide' : 'Show'} Details
+                <svg className={`w-5 h-5 transition-transform ${showTransactions ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            </div>
+
+            {showTransactions && (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                        Member
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                        Package
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                        Order ID
+                      </th>
+                      <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                        Amount
+                      </th>
+                      <th className="px-6 py-3 text-center text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                        Duration
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
+                    {detailedTransactions.map((transaction, index) => (
+                      <tr key={transaction._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
+                          {new Date(transaction.createdAt).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                          })}
+                        </td>
+                        <td className="px-6 py-4">
+                          <div>
+                            <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{transaction.user.name}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{transaction.user.email}</p>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-200">
+                            {transaction.package.name}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm font-mono text-gray-600 dark:text-gray-300">
+                          {transaction.orderId}
+                        </td>
+                        <td className="px-6 py-4 text-right font-semibold text-green-700 dark:text-green-400">
+                          {formatCurrency(transaction.amount)}
+                        </td>
+                        <td className="px-6 py-4 text-center text-sm text-gray-600 dark:text-gray-300">
+                          {transaction.package.durationMonths} {transaction.package.durationMonths === 1 ? 'month' : 'months'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Package Distribution */}
         {packageDistribution.length > 0 && (

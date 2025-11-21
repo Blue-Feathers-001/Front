@@ -28,13 +28,13 @@ interface DetailedTransaction {
     _id: string;
     name: string;
     email: string;
-  };
+  } | null;
   package: {
     _id: string;
     name: string;
     price: number;
     durationMonths: number;
-  };
+  } | null;
   amount: number;
   status: string;
   createdAt: string;
@@ -140,7 +140,7 @@ export default function MonthlyReportsPage() {
 
       detailedTransactions.forEach((transaction) => {
         const date = new Date(transaction.createdAt).toLocaleDateString();
-        csvContent += `${date},"${transaction.user.name}",${transaction.user.email},"${transaction.package.name}",${transaction.orderId},${transaction.amount.toFixed(2)},${transaction.package.durationMonths}\n`;
+        csvContent += `${date},"${transaction.user?.name || 'Unknown User'}",${transaction.user?.email || 'N/A'},"${transaction.package?.name || 'Deleted Package'}",${transaction.orderId},${transaction.amount.toFixed(2)},${transaction.package?.durationMonths || 'N/A'}\n`;
       });
     }
 
@@ -315,13 +315,13 @@ export default function MonthlyReportsPage() {
           <tr>
             <td>${date}</td>
             <td>
-              <div style="font-weight: bold;">${transaction.user.name}</div>
-              <div style="font-size: 11px; color: #666;">${transaction.user.email}</div>
+              <div style="font-weight: bold;">${transaction.user?.name || 'Unknown User'}</div>
+              <div style="font-size: 11px; color: #666;">${transaction.user?.email || 'N/A'}</div>
             </td>
-            <td>${transaction.package.name}</td>
+            <td>${transaction.package?.name || 'Deleted Package'}</td>
             <td style="font-family: monospace; font-size: 11px;">${transaction.orderId}</td>
             <td style="text-align: right;">${formatCurrency(transaction.amount)}</td>
-            <td style="text-align: center;">${transaction.package.durationMonths} ${transaction.package.durationMonths === 1 ? 'month' : 'months'}</td>
+            <td style="text-align: center;">${transaction.package?.durationMonths ? `${transaction.package.durationMonths} ${transaction.package.durationMonths === 1 ? 'month' : 'months'}` : 'N/A'}</td>
           </tr>
         `;
       });
@@ -633,13 +633,17 @@ export default function MonthlyReportsPage() {
                         </td>
                         <td className="px-6 py-4">
                           <div>
-                            <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{transaction.user.name}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">{transaction.user.email}</p>
+                            <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                              {transaction.user?.name || 'Unknown User'}
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              {transaction.user?.email || 'N/A'}
+                            </p>
                           </div>
                         </td>
                         <td className="px-6 py-4">
                           <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-200">
-                            {transaction.package.name}
+                            {transaction.package?.name || 'Deleted Package'}
                           </span>
                         </td>
                         <td className="px-6 py-4 text-sm font-mono text-gray-600 dark:text-gray-300">
@@ -649,7 +653,9 @@ export default function MonthlyReportsPage() {
                           {formatCurrency(transaction.amount)}
                         </td>
                         <td className="px-6 py-4 text-center text-sm text-gray-600 dark:text-gray-300">
-                          {transaction.package.durationMonths} {transaction.package.durationMonths === 1 ? 'month' : 'months'}
+                          {transaction.package?.durationMonths
+                            ? `${transaction.package.durationMonths} ${transaction.package.durationMonths === 1 ? 'month' : 'months'}`
+                            : 'N/A'}
                         </td>
                       </tr>
                     ))}

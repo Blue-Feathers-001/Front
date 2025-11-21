@@ -58,7 +58,7 @@ export default function MonthlyReportsPage() {
   const [detailedTransactions, setDetailedTransactions] = useState<DetailedTransaction[]>([]);
   const [summary, setSummary] = useState<MonthlySummary | null>(null);
   const [monthsToShow, setMonthsToShow] = useState(12);
-  const [showTransactions, setShowTransactions] = useState(false);
+  const [showTransactions, setShowTransactions] = useState(true);
 
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',

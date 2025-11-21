@@ -15,6 +15,25 @@ interface WeeklyData {
   weekStart: string;
 }
 
+interface DetailedTransaction {
+  _id: string;
+  orderId: string;
+  user: {
+    _id: string;
+    name: string;
+    email: string;
+  } | null;
+  package: {
+    _id: string;
+    name: string;
+    price: number;
+    durationMonths: number;
+  } | null;
+  amount: number;
+  status: string;
+  createdAt: string;
+}
+
 interface WeeklySummary {
   totalUsers: number;
   activeMembers: number;
@@ -28,8 +47,10 @@ export default function WeeklyReportsPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [weeklyData, setWeeklyData] = useState<WeeklyData[]>([]);
+  const [detailedTransactions, setDetailedTransactions] = useState<DetailedTransaction[]>([]);
   const [summary, setSummary] = useState<WeeklySummary | null>(null);
   const [weeksToShow, setWeeksToShow] = useState(8);
+  const [showTransactions, setShowTransactions] = useState(true);
 
   useEffect(() => {
     fetchWeeklyReport();
@@ -42,6 +63,7 @@ export default function WeeklyReportsPage() {
 
       if (response.success) {
         setWeeklyData(response.data.weeklyData);
+        setDetailedTransactions(response.data.detailedTransactions || []);
         setSummary(response.data.summary);
       } else {
         toast.error('Failed to fetch weekly report');
@@ -256,6 +278,96 @@ export default function WeeklyReportsPage() {
             </table>
           </div>
         </div>
+
+        {/* Detailed Transactions */}
+        {detailedTransactions.length > 0 && (
+          <div className="glass-card-solid rounded-2xl shadow-2xl overflow-hidden mt-8 animate-fadeInUp">
+            <div className="px-6 py-5 border-b border-gray-200 dark:border-gray-600 bg-gradient-to-r from-indigo-600 to-indigo-700 flex justify-between items-center">
+              <div>
+                <h2 className="text-xl font-bold text-white">Recent Transactions</h2>
+                <p className="text-white/80 text-sm mt-1">Detailed payment records (Last 100 transactions)</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowTransactions(!showTransactions)}
+                className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2"
+              >
+                {showTransactions ? 'Hide' : 'Show'} Details
+                <svg className={`w-5 h-5 transition-transform ${showTransactions ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            </div>
+
+            {showTransactions && (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                        Member
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                        Package
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                        Order ID
+                      </th>
+                      <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                        Amount
+                      </th>
+                      <th className="px-6 py-3 text-center text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
+                        Duration
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
+                    {detailedTransactions.map((transaction) => (
+                      <tr key={transaction._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
+                          {new Date(transaction.createdAt).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                          })}
+                        </td>
+                        <td className="px-6 py-4">
+                          <div>
+                            <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                              {transaction.user?.name || 'Unknown User'}
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              {transaction.user?.email || 'N/A'}
+                            </p>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-200">
+                            {transaction.package?.name || 'Deleted Package'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm font-mono text-gray-600 dark:text-gray-300">
+                          {transaction.orderId}
+                        </td>
+                        <td className="px-6 py-4 text-right font-semibold text-green-700 dark:text-green-400">
+                          {formatCurrency(transaction.amount)}
+                        </td>
+                        <td className="px-6 py-4 text-center text-sm text-gray-600 dark:text-gray-300">
+                          {transaction.package?.durationMonths 
+                            ? `${transaction.package.durationMonths} ${transaction.package.durationMonths === 1 ? 'month' : 'months'}`
+                            : 'N/A'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Additional Stats */}
         {summary && weeklyData.length > 0 && (

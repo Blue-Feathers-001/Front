@@ -171,6 +171,19 @@ export const notificationAPI = {
   },
 };
 
+// Dashboard API
+export const dashboardAPI = {
+  getStats: async () => {
+    const { data } = await api.get<ApiResponse<{
+      totalUsers: number;
+      activeMembers: number;
+      totalRevenue: number;
+      totalPackages: number;
+    }>>('/dashboard/stats');
+    return data;
+  },
+};
+
 // Auth/Profile API
 export const authAPI = {
   updateProfile: async (profileData: {

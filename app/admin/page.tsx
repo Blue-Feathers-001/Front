@@ -2,18 +2,55 @@
 
 import { useAuth } from '@/lib/authContext';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { dashboardAPI } from '@/lib/api';
+import toast from 'react-hot-toast';
+
+interface DashboardStats {
+  totalUsers: number;
+  activeMembers: number;
+  totalRevenue: number;
+  totalPackages: number;
+}
 
 export default function AdminDashboard() {
   const { user, loading: authLoading, isAdmin } = useAuth();
   const router = useRouter();
+  const [stats, setStats] = useState<DashboardStats>({
+    totalUsers: 0,
+    activeMembers: 0,
+    totalRevenue: 0,
+    totalPackages: 0,
+  });
+  const [loadingStats, setLoadingStats] = useState(true);
 
   useEffect(() => {
     if (!authLoading && !isAdmin) {
       router.push('/dashboard');
     }
   }, [authLoading, isAdmin, router]);
+
+  useEffect(() => {
+    if (isAdmin) {
+      fetchDashboardStats();
+    }
+  }, [isAdmin]);
+
+  const fetchDashboardStats = async () => {
+    try {
+      setLoadingStats(true);
+      const response = await dashboardAPI.getStats();
+      if (response.success && response.data) {
+        setStats(response.data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch dashboard stats:', error);
+      toast.error('Failed to load dashboard statistics');
+    } finally {
+      setLoadingStats(false);
+    }
+  };
 
   if (authLoading) {
     return (
@@ -109,6 +146,18 @@ export default function AdminDashboard() {
       hoverColor: 'hover:from-red-600 hover:to-red-700',
     },
     {
+      title: 'Member Feedback',
+      description: 'View and respond to member feedback and suggestions',
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+        </svg>
+      ),
+      href: '/admin/feedback',
+      color: 'from-pink-500 to-pink-600',
+      hoverColor: 'hover:from-pink-600 hover:to-pink-700',
+    },
+    {
       title: 'Entry Logs',
       description: 'View member check-ins and entry history',
       icon: (
@@ -166,7 +215,9 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Total Users</p>
-                <p className="text-2xl font-bold text-gray-800 dark:text-white">6</p>
+                <p className="text-2xl font-bold text-gray-800 dark:text-white">
+                  {loadingStats ? '...' : stats.totalUsers}
+                </p>
               </div>
               <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg">
                 <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -180,7 +231,9 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Active Members</p>
-                <p className="text-2xl font-bold text-gray-800 dark:text-white">0</p>
+                <p className="text-2xl font-bold text-gray-800 dark:text-white">
+                  {loadingStats ? '...' : stats.activeMembers}
+                </p>
               </div>
               <div className="bg-green-100 dark:bg-green-900/30 p-3 rounded-lg">
                 <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -194,7 +247,9 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Total Revenue</p>
-                <p className="text-2xl font-bold text-gray-800 dark:text-white">LKR 0</p>
+                <p className="text-2xl font-bold text-gray-800 dark:text-white">
+                  {loadingStats ? '...' : `LKR ${stats.totalRevenue.toLocaleString()}`}
+                </p>
               </div>
               <div className="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-lg">
                 <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -208,7 +263,9 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Packages</p>
-                <p className="text-2xl font-bold text-gray-800 dark:text-white">3</p>
+                <p className="text-2xl font-bold text-gray-800 dark:text-white">
+                  {loadingStats ? '...' : stats.totalPackages}
+                </p>
               </div>
               <div className="bg-orange-100 dark:bg-orange-900/30 p-3 rounded-lg">
                 <svg className="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

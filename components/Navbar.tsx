@@ -243,6 +243,12 @@ export default function Navbar() {
                       Messages
                     </Link>
                     <Link
+                      href="/feedback"
+                      className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
+                    >
+                      Feedback
+                    </Link>
+                    <Link
                       href="/profile"
                       className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
                     >
@@ -277,6 +283,12 @@ export default function Navbar() {
                       className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
                     >
                       Messages
+                    </Link>
+                    <Link
+                      href="/feedback"
+                      className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
+                    >
+                      Feedback
                     </Link>
                     <Link
                       href="/profile"
@@ -515,6 +527,13 @@ export default function Navbar() {
                       Messages
                     </Link>
                     <Link
+                      href="/feedback"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      Feedback
+                    </Link>
+                    <Link
                       href="/profile"
                       onClick={() => setMobileMenuOpen(false)}
                       className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
@@ -557,6 +576,13 @@ export default function Navbar() {
                       className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
                     >
                       Messages
+                    </Link>
+                    <Link
+                      href="/feedback"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      Feedback
                     </Link>
                     <Link
                       href="/profile"

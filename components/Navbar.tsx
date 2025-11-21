@@ -10,7 +10,7 @@ import type { Notification } from '@/types';
 import toast from 'react-hot-toast';
 
 export default function Navbar() {
-  const { user, logout, isAuthenticated, isAdmin } = useAuth();
+  const { user, logout, isAuthenticated, isAdmin, isTrainer } = useAuth();
   const { unreadCount: socketUnreadCount, notifications: socketNotifications, connected } = useSocket();
   const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -179,7 +179,7 @@ export default function Navbar() {
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center gap-2 lg:gap-3 xl:gap-4">
-            {(!isAuthenticated || !isAdmin) && (
+            {(!isAuthenticated || (!isAdmin && !isTrainer)) && (
               <Link
                 href="/packages"
                 className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
@@ -216,6 +216,54 @@ export default function Navbar() {
                       )}
                     </button>
                   </>
+                ) : isTrainer ? (
+                  <>
+                    <Link
+                      href="/trainer/members"
+                      className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
+                    >
+                      Members
+                    </Link>
+                    <Link
+                      href="/trainer/gym-now"
+                      className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
+                    >
+                      Current Occupancy
+                    </Link>
+                    <Link
+                      href="/trainer/attendance"
+                      className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
+                    >
+                      Attendance
+                    </Link>
+                    <Link
+                      href="/chat"
+                      className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
+                    >
+                      Messages
+                    </Link>
+                    <Link
+                      href="/profile"
+                      className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
+                    >
+                      Profile
+                    </Link>
+                    <button
+                      onClick={toggleTheme}
+                      className="text-white hover:text-primary-200 transition-colors p-1.5 lg:p-2 rounded-lg hover:bg-white/10 flex-shrink-0"
+                      title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                    >
+                      {theme === 'dark' ? (
+                        <svg className="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                      )}
+                    </button>
+                  </>
                 ) : (
                   <>
                     <Link
@@ -223,6 +271,12 @@ export default function Navbar() {
                       className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
                     >
                       Dashboard
+                    </Link>
+                    <Link
+                      href="/chat"
+                      className="text-white hover:text-primary-200 transition-colors font-medium text-sm lg:text-base whitespace-nowrap"
+                    >
+                      Messages
                     </Link>
                     <Link
                       href="/profile"
@@ -386,7 +440,7 @@ export default function Navbar() {
         {/* Mobile menu */}
         {mobileMenuOpen && (
           <div className="md:hidden mt-4 pb-4 space-y-3 border-t border-white/20 pt-4 animate-fadeInDown">
-            {(!isAuthenticated || !isAdmin) && (
+            {(!isAuthenticated || (!isAdmin && !isTrainer)) && (
               <Link
                 href="/packages"
                 onClick={() => setMobileMenuOpen(false)}
@@ -430,6 +484,64 @@ export default function Navbar() {
                       )}
                     </button>
                   </>
+                ) : isTrainer ? (
+                  <>
+                    <Link
+                      href="/trainer/members"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      Members
+                    </Link>
+                    <Link
+                      href="/trainer/gym-now"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      Current Occupancy
+                    </Link>
+                    <Link
+                      href="/trainer/attendance"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      Attendance
+                    </Link>
+                    <Link
+                      href="/chat"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      Messages
+                    </Link>
+                    <Link
+                      href="/profile"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      Profile
+                    </Link>
+                    <button
+                      onClick={toggleTheme}
+                      className="flex items-center gap-2 w-full text-left py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      {theme === 'dark' ? (
+                        <>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                          </svg>
+                          Light Mode
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                          </svg>
+                          Dark Mode
+                        </>
+                      )}
+                    </button>
+                  </>
                 ) : (
                   <>
                     <Link
@@ -438,6 +550,13 @@ export default function Navbar() {
                       className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
                     >
                       Dashboard
+                    </Link>
+                    <Link
+                      href="/chat"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block py-2 hover:bg-white/10 px-3 rounded-lg transition text-white font-medium"
+                    >
+                      Messages
                     </Link>
                     <Link
                       href="/profile"

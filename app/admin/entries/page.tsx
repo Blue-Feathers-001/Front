@@ -12,6 +12,7 @@ interface Entry {
     email: string;
     membershipPlan: string;
     membershipStatus: string;
+    role: 'admin' | 'user' | 'trainer';
   };
   timestamp: string;
   status: 'allowed' | 'denied';
@@ -26,12 +27,22 @@ interface Stats {
   thisMonth: number;
 }
 
+interface FlaggedUser {
+  _id: string;
+  name: string;
+  email: string;
+  isFlagged: boolean;
+  flaggedAt: string;
+  flagReason: string;
+}
+
 export default function AdminEntriesPage() {
   const { user, loading: authLoading, isAdmin } = useAuth();
   const router = useRouter();
 
   const [entries, setEntries] = useState<Entry[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
+  const [flaggedUsers, setFlaggedUsers] = useState<FlaggedUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -47,6 +58,7 @@ export default function AdminEntriesPage() {
     if (isAdmin) {
       fetchEntries();
       fetchStats();
+      fetchFlaggedUsers();
     }
   }, [isAdmin, page, filterStatus]);
 
@@ -102,6 +114,50 @@ export default function AdminEntriesPage() {
     }
   };
 
+  const fetchFlaggedUsers = async () => {
+    try {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/entries/flagged`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setFlaggedUsers(data.users);
+      }
+    } catch (error) {
+      console.error('Failed to fetch flagged users:', error);
+    }
+  };
+
+  const clearFlag = async (userId: string) => {
+    try {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/entries/flagged/${userId}/clear`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Refresh flagged users list
+        fetchFlaggedUsers();
+      }
+    } catch (error) {
+      console.error('Failed to clear flag:', error);
+    }
+  };
+
   if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -134,6 +190,47 @@ export default function AdminEntriesPage() {
             Track gym member check-ins and access history
           </p>
         </div>
+
+        {/* Flagged Users Alert */}
+        {flaggedUsers.length > 0 && (
+          <div className="glass-card-solid rounded-xl p-6 shadow-lg mb-6 border-2 border-yellow-500">
+            <div className="flex items-start gap-4">
+              <div className="bg-yellow-100 dark:bg-yellow-900/30 p-3 rounded-lg">
+                <svg className="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-yellow-600 dark:text-yellow-400 mb-2">
+                  ⚠️ Suspicious Activity Detected
+                </h3>
+                <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                  {flaggedUsers.length} user{flaggedUsers.length > 1 ? 's have' : ' has'} been flagged for suspicious activity:
+                </p>
+                <div className="space-y-2">
+                  {flaggedUsers.map((flaggedUser) => (
+                    <div key={flaggedUser._id} className="bg-white dark:bg-gray-700 p-3 rounded-lg flex items-center justify-between">
+                      <div>
+                        <p className="font-semibold text-gray-800 dark:text-white">{flaggedUser.name}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">{flaggedUser.flagReason}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          Flagged: {new Date(flaggedUser.flaggedAt).toLocaleString()}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => clearFlag(flaggedUser._id)}
+                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+                      >
+                        Clear Flag
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Stats Cards */}
         {stats && (
@@ -239,6 +336,7 @@ export default function AdminEntriesPage() {
                 <tr>
                   <th className="px-6 py-4 text-left font-bold">Time</th>
                   <th className="px-6 py-4 text-left font-bold">Member</th>
+                  <th className="px-6 py-4 text-left font-bold">Role</th>
                   <th className="px-6 py-4 text-left font-bold">Plan</th>
                   <th className="px-6 py-4 text-left font-bold">Status</th>
                   <th className="px-6 py-4 text-left font-bold">Result</th>
@@ -261,6 +359,19 @@ export default function AdminEntriesPage() {
                         <p className="font-semibold">{entry.user.name}</p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">{entry.user.email}</p>
                       </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`px-3 py-1 rounded-lg text-xs font-semibold uppercase ${
+                          entry.user.role === 'trainer'
+                            ? 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300'
+                            : entry.user.role === 'admin'
+                            ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
+                            : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                        }`}
+                      >
+                        {entry.user.role}
+                      </span>
                     </td>
                     <td className="px-6 py-4 dark:text-gray-200 capitalize">
                       {entry.user.membershipPlan || 'N/A'}

@@ -53,7 +53,7 @@ export default function EntryScanPage() {
               // Send to backend for validation
               const API_URL = process.env.NEXT_PUBLIC_API_URL;
               console.log('[Scanner] Sending to backend:', API_URL);
-              const response = await fetch(`${API_URL}/entry/scan`, {
+              const response = await fetch(`${API_URL}/entries/scan`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

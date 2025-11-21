@@ -85,6 +85,198 @@ export default function MonthlyReportsPage() {
     return monthNames[month - 1];
   };
 
+  const exportToCSV = () => {
+    if (monthlyData.length === 0) {
+      toast.error('No data to export');
+      return;
+    }
+
+    // Create CSV content
+    let csvContent = 'Month,Year,Transactions,Revenue,Avg per Transaction\n';
+
+    monthlyData.forEach((month) => {
+      const avgPerTransaction = month.revenue / month.count;
+      csvContent += `${getMonthName(month._id.month)},${month._id.year},${month.count},${month.revenue.toFixed(2)},${avgPerTransaction.toFixed(2)}\n`;
+    });
+
+    // Add package distribution
+    if (packageDistribution.length > 0) {
+      csvContent += '\n\nPackage Distribution\n';
+      csvContent += 'Package Name,Sales Count,Total Revenue,Revenue Share (%)\n';
+
+      const totalRevenue = packageDistribution.reduce((sum, p) => sum + p.revenue, 0);
+      packageDistribution.forEach((pkg) => {
+        const share = (pkg.revenue / totalRevenue) * 100;
+        csvContent += `${pkg._id},${pkg.count},${pkg.revenue.toFixed(2)},${share.toFixed(1)}\n`;
+      });
+    }
+
+    // Download CSV file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `monthly-revenue-report-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast.success('CSV exported successfully!');
+  };
+
+  const exportToPDF = () => {
+    if (monthlyData.length === 0) {
+      toast.error('No data to export');
+      return;
+    }
+
+    // Create a printable version
+    const printWindow = window.open('', '', 'height=800,width=800');
+    if (!printWindow) {
+      toast.error('Please allow popups to export PDF');
+      return;
+    }
+
+    let html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Monthly Revenue Report</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; }
+          h1 { color: #667eea; border-bottom: 3px solid #667eea; padding-bottom: 10px; }
+          h2 { color: #764ba2; margin-top: 30px; }
+          table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+          th { background-color: #667eea; color: white; padding: 12px; text-align: left; }
+          td { padding: 10px; border-bottom: 1px solid #ddd; }
+          tr:nth-child(even) { background-color: #f9f9f9; }
+          .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0; }
+          .summary-card { padding: 15px; border: 2px solid #667eea; border-radius: 8px; }
+          .summary-card h3 { margin: 0 0 5px 0; font-size: 14px; color: #666; }
+          .summary-card p { margin: 0; font-size: 24px; font-weight: bold; color: #667eea; }
+          .footer { margin-top: 30px; text-align: center; color: #666; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <h1>Monthly Revenue Report</h1>
+        <p><strong>Generated:</strong> ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</p>
+        <p><strong>Period:</strong> Last ${monthsToShow} Months</p>
+    `;
+
+    // Add summary
+    if (summary) {
+      html += `
+        <div class="summary">
+          <div class="summary-card">
+            <h3>Total Revenue</h3>
+            <p>${formatCurrency(summary.totalRevenue)}</p>
+          </div>
+          <div class="summary-card">
+            <h3>Avg Monthly Revenue</h3>
+            <p>${formatCurrency(summary.averageMonthlyRevenue)}</p>
+          </div>
+          <div class="summary-card">
+            <h3>Total Transactions</h3>
+            <p>${summary.totalTransactions}</p>
+          </div>
+          <div class="summary-card">
+            <h3>Active Members</h3>
+            <p>${summary.activeMembers} / ${summary.totalUsers}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    // Add monthly data
+    html += `
+      <h2>Monthly Breakdown</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Year</th>
+            <th style="text-align: right;">Transactions</th>
+            <th style="text-align: right;">Revenue</th>
+            <th style="text-align: right;">Avg per Transaction</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    monthlyData.forEach((month) => {
+      const avgPerTransaction = month.revenue / month.count;
+      html += `
+        <tr>
+          <td>${getMonthName(month._id.month)}</td>
+          <td>${month._id.year}</td>
+          <td style="text-align: right;">${month.count}</td>
+          <td style="text-align: right;">${formatCurrency(month.revenue)}</td>
+          <td style="text-align: right;">${formatCurrency(avgPerTransaction)}</td>
+        </tr>
+      `;
+    });
+
+    html += `
+        </tbody>
+      </table>
+    `;
+
+    // Add package distribution
+    if (packageDistribution.length > 0) {
+      const totalRevenue = packageDistribution.reduce((sum, p) => sum + p.revenue, 0);
+
+      html += `
+        <h2>Package Distribution</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Package Name</th>
+              <th style="text-align: right;">Sales Count</th>
+              <th style="text-align: right;">Total Revenue</th>
+              <th style="text-align: right;">Revenue Share</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      packageDistribution.forEach((pkg) => {
+        const share = (pkg.revenue / totalRevenue) * 100;
+        html += `
+          <tr>
+            <td>${pkg._id}</td>
+            <td style="text-align: right;">${pkg.count}</td>
+            <td style="text-align: right;">${formatCurrency(pkg.revenue)}</td>
+            <td style="text-align: right;">${share.toFixed(1)}%</td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+      `;
+    }
+
+    html += `
+        <div class="footer">
+          <p>Blue Feathers Gym - Monthly Revenue Report</p>
+          <p>&copy; ${new Date().getFullYear()} Blue Feathers Gym. All rights reserved.</p>
+        </div>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.write(html);
+    printWindow.document.close();
+
+    // Wait for content to load then print
+    printWindow.onload = () => {
+      printWindow.print();
+      toast.success('PDF export initiated - check your print dialog');
+    };
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -125,7 +317,7 @@ export default function MonthlyReportsPage() {
             </h1>
             <p className="text-white/90 mt-2">Track monthly gym revenue, transactions and package distribution</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <select
               value={monthsToShow}
               onChange={(e) => setMonthsToShow(Number(e.target.value))}
@@ -135,6 +327,28 @@ export default function MonthlyReportsPage() {
               <option value={12} className="bg-gray-800">Last 12 Months</option>
               <option value={24} className="bg-gray-800">Last 24 Months</option>
             </select>
+            <button
+              onClick={exportToCSV}
+              disabled={loading || monthlyData.length === 0}
+              className="bg-green-600/80 backdrop-blur-sm hover:bg-green-600 text-white font-semibold py-2.5 px-5 rounded-lg border-2 border-green-500/50 hover:border-green-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              title="Export to CSV"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              CSV
+            </button>
+            <button
+              onClick={exportToPDF}
+              disabled={loading || monthlyData.length === 0}
+              className="bg-red-600/80 backdrop-blur-sm hover:bg-red-600 text-white font-semibold py-2.5 px-5 rounded-lg border-2 border-red-500/50 hover:border-red-400 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              title="Export to PDF"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+              PDF
+            </button>
             <button
               onClick={() => router.push('/admin/reports/weekly')}
               className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-semibold py-2.5 px-6 rounded-lg border-2 border-white/30 hover:border-white/50 transition-all duration-300"
@@ -296,18 +510,18 @@ export default function MonthlyReportsPage() {
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
                       Package Name
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
                       Sales Count
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
                       Total Revenue
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-right text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
                       Revenue Share
                     </th>
                   </tr>
@@ -318,7 +532,7 @@ export default function MonthlyReportsPage() {
                     const share = (pkg.revenue / totalRevenue) * 100;
 
                     return (
-                      <tr key={index} className="hover:bg-gray-50 transition-colors duration-150">
+                      <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
                         <td className="px-6 py-4 text-gray-800 dark:text-gray-200 font-medium">{pkg._id}</td>
                         <td className="px-6 py-4 text-right">
                           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-purple-100 text-purple-800">
